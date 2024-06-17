@@ -1,0 +1,3 @@
+[submodule "oxebots_interfaces"]
+	path = src/oxebots_interfaces
+	url = git@github.com:OxeBots/oxebots_interfaces.git
