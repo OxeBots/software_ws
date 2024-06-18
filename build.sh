@@ -1,5 +1,5 @@
 #!/bin/bash
-# set -e
+set -e
 
 # Set the default build type (Debug, Release, RelWithDebInfo and MinSizeRel)
 BUILD_TYPE=RelWithDebInfo

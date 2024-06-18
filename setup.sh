@@ -1,7 +1,6 @@
 #!/bin/bash
 set -e
 
-# vcs import < src/ros2.repos src
 git submodule update --init --recursive
 sudo apt-get update
 rosdep update --rosdistro=$ROS_DISTRO
