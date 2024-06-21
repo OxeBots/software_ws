@@ -5,8 +5,11 @@
     "--privileged",
     "--network=host",
     "--ipc=host",
-    "--gpus",
-    "all"
+    // uncomment the following line to use the host's GPU, if you use nvidia
+    // gpu, you need to install nvidia-container-toolkit on the host
+    // https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker
+    // "--gpus",
+    // "all"
   ],
   "containerEnv": {
     "DISPLAY": "${localEnv:DISPLAY}", // Needed for GUI
@@ -18,20 +21,21 @@
   "customizations": {
     "vscode": {
       "extensions": [
+        "althack.ament-task-provider",
+        "betwo.b2-catkin-tools",
         "charliermarsh.ruff",
-        "DotJoshJohnson.xml",
+        "cschlosser.doxdocgen",
         "jeff-hykin.better-cpp-syntax",
         "ms-azuretools.vscode-docker",
         "ms-iot.vscode-ros",
         "ms-python.python",
-        "twxs.cmake",
-        "ms-vscode.cmake-tools",
         "ms-vscode.cpptools",
+        "pbkit.vscode-pbkit",
+        "redhat.vscode-xml",
         "redhat.vscode-yaml",
         "smilerobotics.urdf",
+        "twxs.cmake",
         "yzhang.markdown-all-in-one",
-        "betwo.b2-catkin-tools",
-        "althack.ament-task-provider"
       ]
     }
   },
