@@ -1,3 +1,6 @@
 [submodule "oxebots_interfaces"]
 	path = src/oxebots_interfaces
 	url = git@github.com:OxeBots/oxebots_interfaces.git
+[submodule "src/oxebots_comms"]
+	path = src/oxebots_comms
+	url = git@github.com:OxeBots/oxebots_comms.git
