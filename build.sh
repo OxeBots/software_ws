@@ -6,7 +6,5 @@ BUILD_TYPE=RelWithDebInfo
 
 colcon build \
     --merge-install \
-    --cmake-args "-DCMAKE_BUILD_TYPE=RelWithDebInfo" "-DCMAKE_EXPORT_COMPILE_COMMANDS=On"\
+    --cmake-args "-DCMAKE_BUILD_TYPE=${BUILD_TYPE}" "-DCMAKE_EXPORT_COMPILE_COMMANDS=On"\
     -Wall -Wextra -Wpedantic
-
-if [ -f install/setup.bash ]; then source install/setup.bash; fi
