@@ -15,14 +15,24 @@
     "C_Cpp.clang_format_fallbackStyle": "Google",
     "C_Cpp.clang_format_style": "file:${workspaceFolder}/.clang-format",
     "C_Cpp.doxygen.generatedStyle": "/**",
+    "C_Cpp.default.includePath": [
+        "${default}"
+    ],
     "[python]": {
         "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
-            "source.organizeImports": "explicit"
+            "source.organizeImports": "explicit",
+            "python.sortImports": "explicit",
         }
     },
     "ruff.format.args": [
         "--config=${workspaceFolder}/.ruff.toml",
+    ],
+    "ruff.organizeImports": false,
+    "isort.args": [
+        "--profile",
+        "google"
     ],
     "[markdown]": {
         "editor.defaultFormatter": "yzhang.markdown-all-in-one"
