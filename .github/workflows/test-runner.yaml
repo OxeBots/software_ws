@@ -1,0 +1,14 @@
+name: test-runner
+
+on: [pull_request, workflow_dispatch]
+
+env:
+  AMENT_CPPCHECK_ALLOW_SLOW_VERSIONS: true
+
+jobs:
+  test:
+    name: test
+    runs-on: [self-hosted, colcon-hosted, linux, x64]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/test/
