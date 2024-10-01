@@ -5,6 +5,9 @@ on: [pull_request, workflow_dispatch]
 env:
   AMENT_CPPCHECK_ALLOW_SLOW_VERSIONS: true
 
+permissions:
+  contents: write
+
 jobs:
   test:
     name: test
