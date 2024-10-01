@@ -19,13 +19,20 @@ RUN apt-get update && apt-get install -y git bash-completion \
     && echo "if [ -f /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash ]; then source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash; fi" >> /home/$USERNAME/.bashrc \
     && rm -rf /var/lib/apt/lists/*
 
-# Modify ownership for github CI
-USER root
-RUN chown -R $USERNAME:$USERNAME /github/home
-
 # Switch from root to user
 USER $USERNAME
 RUN sudo usermod --append --groups video $USERNAME
+
+# Setup env
+ENV ROS_DISTRO=humble
+ENV AMENT_PREFIX_PATH=/opt/ros/humble
+ENV COLCON_PREFIX_PATH=/opt/ros/humble
+ENV LD_LIBRARY_PATH=/opt/ros/humble/lib
+ENV PATH=/opt/ros/humble/bin:$PATH
+ENV PYTHONPATH=/opt/ros/humble/local/lib/python3.10/dist-packages:/opt/ros/humble/lib/python3.10/site-packages
+ENV ROS_PYTHON_VERSION=3
+ENV ROS_VERSION=2
+ENV DEBIAN_FRONTEND=
 
 # Update all packages
 RUN sudo apt update && sudo apt upgrade -y
