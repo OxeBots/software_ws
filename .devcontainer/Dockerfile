@@ -19,6 +19,10 @@ RUN apt-get update && apt-get install -y git bash-completion \
     && echo "if [ -f /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash ]; then source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash; fi" >> /home/$USERNAME/.bashrc \
     && rm -rf /var/lib/apt/lists/*
 
+# Modify ownership for github CI
+USER root
+RUN chown -R $USERNAME:$USERNAME /github/home
+
 # Switch from root to user
 USER $USERNAME
 RUN sudo usermod --append --groups video $USERNAME
