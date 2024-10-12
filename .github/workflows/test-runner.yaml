@@ -1,0 +1,21 @@
+name: test-runner
+
+on: [pull_request, workflow_dispatch]
+
+env:
+  AMENT_CPPCHECK_ALLOW_SLOW_VERSIONS: true
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    name: test
+    runs-on: [self-hosted, colcon-hosted, linux, x64]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Run test action
+        uses: ./.github/actions/test/

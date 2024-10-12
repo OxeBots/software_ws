@@ -1,8 +1,9 @@
 ---
 Language: Cpp
-# BasedOnStyle:  Google
-AccessModifierOffset: -1
-AlignAfterOpenBracket: Align
+BasedOnStyle: Google
+AccessModifierOffset: -2
+IndentAccessModifiers: false
+AlignAfterOpenBracket: AlwaysBreak
 AlignConsecutiveMacros: false
 AlignConsecutiveAssignments: false
 AlignConsecutiveDeclarations: false
@@ -27,7 +28,7 @@ BinPackParameters: true
 BraceWrapping:
   AfterCaseLabel: true
   AfterClass: true
-  AfterControlStatement: true
+  AfterControlStatement: false
   AfterEnum: true
   AfterFunction: true
   AfterNamespace: true
@@ -35,13 +36,14 @@ BraceWrapping:
   AfterStruct: true
   AfterUnion: true
   AfterExternBlock: true
-  BeforeCatch: true
-  BeforeElse: true
+  BeforeCatch: false
+  BeforeElse: false
   IndentBraces: false
   SplitEmptyFunction: true
   SplitEmptyRecord: true
   SplitEmptyNamespace: true
 BreakBeforeBinaryOperators: None
+BracedInitializerIndentWidth: 2
 BreakBeforeBraces: Custom
 BreakBeforeInheritanceComma: false
 BreakInheritanceList: BeforeColon
@@ -50,7 +52,7 @@ BreakConstructorInitializersBeforeComma: false
 BreakConstructorInitializers: BeforeColon
 BreakAfterJavaFieldAnnotations: false
 BreakStringLiterals: true
-ColumnLimit: 79
+ColumnLimit: 100
 CommentPragmas: "^ IWYU pragma:"
 CompactNamespaces: false
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
@@ -68,19 +70,16 @@ ForEachMacros:
   - BOOST_FOREACH
 IncludeBlocks: Regroup
 IncludeCategories:
-  - Regex: '^<ext/.*\.h>'
-    Priority: 2
-    SortPriority: 0
   - Regex: '^<.*\.h>'
     Priority: 1
     SortPriority: 0
-  - Regex: '^<.*\.hpp>'
+  - Regex: '^<[^/]+>$'
     Priority: 2
     SortPriority: 0
-  - Regex: "^<.*"
+  - Regex: '^<.*>'
     Priority: 3
     SortPriority: 0
-  - Regex: ".*"
+  - Regex: '.*'
     Priority: 4
     SortPriority: 0
 IncludeIsMainRegex: "([-_](test|unittest))?$"
@@ -88,7 +87,7 @@ IncludeIsMainSourceRegex: ""
 IndentCaseLabels: true
 IndentGotoLabels: true
 IndentPPDirectives: None
-IndentWidth: 4
+IndentWidth: 2
 IndentWrappedFunctionNames: false
 JavaScriptQuotes: Leave
 JavaScriptWrapImports: true
@@ -138,12 +137,12 @@ RawStringFormats:
       - ParseTextProtoOrDie
     CanonicalDelimiter: ""
     BasedOnStyle: google
-ReflowComments: true
+ReflowComments: false
 SortIncludes: true
 SortUsingDeclarations: true
 SpaceAfterCStyleCast: false
 SpaceAfterLogicalNot: false
-SpaceAfterTemplateKeyword: true
+SpaceAfterTemplateKeyword: false
 SpaceBeforeAssignmentOperators: true
 SpaceBeforeCpp11BracedList: false
 SpaceBeforeCtorInitializerColon: true
@@ -157,6 +156,7 @@ SpacesInAngles: false
 SpacesInConditionalStatement: false
 SpacesInContainerLiterals: true
 SpacesInCStyleCastParentheses: false
+SpacesInLambdaBraces: false
 SpacesInParentheses: false
 SpacesInSquareBrackets: false
 SpaceBeforeSquareBrackets: false

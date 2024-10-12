@@ -36,6 +36,7 @@
         "smilerobotics.urdf",
         "twxs.cmake",
         "yzhang.markdown-all-in-one",
+        "ms-python.isort"
       ]
     }
   },

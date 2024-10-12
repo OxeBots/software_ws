@@ -23,6 +23,17 @@ RUN apt-get update && apt-get install -y git bash-completion \
 USER $USERNAME
 RUN sudo usermod --append --groups video $USERNAME
 
+# Setup env
+ENV ROS_DISTRO=humble
+ENV AMENT_PREFIX_PATH=/opt/ros/humble
+ENV COLCON_PREFIX_PATH=/opt/ros/humble
+ENV LD_LIBRARY_PATH=/opt/ros/humble/lib
+ENV PATH=/opt/ros/humble/bin:$PATH
+ENV PYTHONPATH=/opt/ros/humble/local/lib/python3.10/dist-packages:/opt/ros/humble/lib/python3.10/site-packages
+ENV ROS_PYTHON_VERSION=3
+ENV ROS_VERSION=2
+ENV DEBIAN_FRONTEND=
+
 # Update all packages
 RUN sudo apt update && sudo apt upgrade -y
 
