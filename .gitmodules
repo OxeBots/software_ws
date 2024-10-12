@@ -10,3 +10,6 @@
 [submodule "src/oxebots_observers"]
 	path = src/oxebots_observers
 	url = git@github.com:OxeBots/oxebots_observers.git
+[submodule "src/oxebots_bt_strategy"]
+	path = src/oxebots_bt_strategy
+	url = git@github.com:OxeBots/oxebots_bt_strategy.git
