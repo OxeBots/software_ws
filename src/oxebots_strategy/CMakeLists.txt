@@ -10,7 +10,7 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(oxebots_interfaces REQUIRED)
 find_package(behaviortree_cpp REQUIRED)
-find_package(ament_index_cpp REQUIRED) # <--- ADICIONADO
+find_package(ament_index_cpp REQUIRED)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -35,7 +35,7 @@ ament_target_dependencies(
   rclcpp
   oxebots_interfaces
   behaviortree_cpp
-  ament_index_cpp # <--- ADICIONADO
+  ament_index_cpp
 )
 
 target_include_directories(strategy_node PUBLIC
@@ -43,8 +43,8 @@ target_include_directories(strategy_node PUBLIC
   $<INSTALL_INTERFACE:include>
 )
 
-install(
-  TARGETS
+
+install(TARGETS
   strategy_node
   DESTINATION lib/${PROJECT_NAME}
 )
