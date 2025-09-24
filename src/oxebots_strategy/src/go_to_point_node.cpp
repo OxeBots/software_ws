@@ -31,10 +31,9 @@ BT::NodeStatus GoToPointNode::onStart()
   robot_data.id = robot_id;
   
   float forward_speed = 100.0;
-  robot_data.front_left  =  forward_speed;
-  robot_data.front_right =  forward_speed;
-  robot_data.back_left   =  forward_speed; // Corrigido para andar para frente
-  robot_data.back_right  =  forward_speed; // Corrigido para andar para frente
+  robot_data.x_velocity = forward_speed;  // Velocidade para frente
+  robot_data.y_velocity = 0.0;            // Sem movimento lateral
+  robot_data.angular_velocity = 0.0;      // Sem rotação
 
   msg.robots.push_back(robot_data);
   publisher_->publish(msg);
@@ -57,10 +56,9 @@ void GoToPointNode::onHalted()
   oxebots_interfaces::msg::RobotCmd msg;
   oxebots_interfaces::msg::RobotCmdData robot_data;
   robot_data.id = 0;
-  robot_data.front_left = 0.0;
-  robot_data.front_right = 0.0;
-  robot_data.back_left = 0.0;
-  robot_data.back_right = 0.0;
+  robot_data.x_velocity = 0.0;
+  robot_data.y_velocity = 0.0;
+  robot_data.angular_velocity = 0.0;
   msg.robots.push_back(robot_data);
   publisher_->publish(msg);
 }
