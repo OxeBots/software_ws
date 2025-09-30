@@ -13,3 +13,7 @@
 [submodule "src/ssl_ros_bridge"]
 	path = src/ssl_ros_bridge
 	url = git@github.com:SSL-A-Team/ssl_ros_bridge.git
+[submodule "oxebots_strategy"]
+	path = src/oxebots_strategy
+	url = git@github.com:OxeBots/oxebots_strategy.git
+	branch = main
