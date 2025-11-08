@@ -1,13 +1,13 @@
 # Projeto de capacitação
 
-## Pre-requisitos(recomendado)
+## Pré-requisitos(recomendado)
 
 - Ubuntu (qualquer versão)
 - Docker
 - Vscode com devConteiner
 - Git
 
-## Installing
+## Instalação
 
 1. Clonar repositório com a branch certa para o projeto:
 
