@@ -2,8 +2,6 @@
 
 ## Pre-requisitos(recomendado)
 
-To run this workspace locally, you will need the following:
-
 - Ubuntu (qualquer versão)
 - Docker
 - Vscode com devConteiner
@@ -14,7 +12,7 @@ To run this workspace locally, you will need the following:
 1. Clonar repositório com a branch certa para o projeto:
 
     ```bash
-    git clone -b add_strategy_repo --single-branch --recurse-submodules git@github.com:matheuscctb/Sele-o_ws.git
+    git clone  --recurse-submodules git@github.com:matheuscctb/Sele-o_ws.git
 
     ```
 
@@ -43,7 +41,7 @@ O objetivo principal deste projeto é o desenvolvimento e a implementação das 
 
 > **Atenção:** Os demais módulos (controle, simulação, visão, etc.) já estão implementados e funcionais. **Não é necessário modificar nenhum outro pacote de software fora o de estratégia.**
 
-## 🛠️ Tarefas Principais
+## Tarefas Principais
 
 O trabalho está focado em duas entregas centrais:
 
@@ -51,9 +49,9 @@ O trabalho está focado em duas entregas centrais:
 
 Deve-se implementar uma lógica de jogo simples, definindo os papéis fundamentais para uma partida:
 
-* **Goleiro:** Posicionamento e defesa da nossa meta.
+* **Goleiro:** Posicionamento e defesa.
 * **Defensor:** Posicionamento de bloqueio e apoio ao goleiro.
-* **Atacante:** Posicionamento ofensivo e lógica de chute a gol.
+* **Atacante:** Posicionamento ofensivo.
 
 Para toda a movimentação dos robôs, deve-se utilizar o módulo `go_to_point`, que já está validado e operacional.
 
