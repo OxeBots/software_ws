@@ -61,7 +61,7 @@ A lógica de decisão que coordena os papéis (Goleiro, Defensor, Atacante) deve
 
 ---
 
-## 🔬 Ferramentas de Monitoramento e Debug
+## Ferramentas de Monitoramento e Debug
 
 Para auxiliar no desenvolvimento e verificar se os nós estão se comunicando corretamente, recomendamos o uso das seguintes ferramentas:
 
