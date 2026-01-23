@@ -10,6 +10,9 @@
 [submodule "oxebots_observers"]
 	path = src/oxebots_observers
 	url = git@github.com:OxeBots/oxebots_observers.git
+[submodule "oxebots_strategy"]
+	path = src/oxebots_strategy
+	url = git@github.com:OxeBots/oxebots_strategy.git
 [submodule "ssl_ros_bridge"]
 	path = src/ssl_ros_bridge
 	url = git@github.com:SSL-A-Team/ssl_ros_bridge.git

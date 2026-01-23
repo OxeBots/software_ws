@@ -132,4 +132,5 @@
         "variant": "cpp",
         "*.inc": "cpp"
     },
+    "ROS2.distro": "jazzy",
 }
