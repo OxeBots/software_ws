@@ -1,128 +1,63 @@
 {
-
-"name": "jazzy workspace",
-
-"remoteUser": "${localEnv:USER}",
-
-"runArgs": [
-
-"--privileged",
-
-"--network=host",
-
-"--ipc=host",
-
-"--pid=host",
-
-"-e", "DISPLAY=${env:DISPLAY}"
-
-// uncomment the following line to use the host's GPU, if you use nvidia
-
-// gpu, you need to install nvidia-container-toolkit on the host
-
-// https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker
-
-// "--gpus",
-
-// "all"
-
-],
-
-"privileged": true,
-
-"build": {
-
-"dockerfile": "Dockerfile",
-
-"args": {
-
-"USERNAME": "${localEnv:USER}"
-
+  "name": "jazzy workspace",
+  "remoteUser": "${localEnv:USER}",
+  "runArgs": [
+    "--privileged",
+    "--network=host",
+    "--ipc=host",
+    "--pid=host",
+    "-e", "DISPLAY=${env:DISPLAY}"
+    // uncomment the following line to use the host's GPU, if you use nvidia
+    // gpu, you need to install nvidia-container-toolkit on the host
+    // https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker
+    // "--gpus",
+    // "all"
+  ],
+  "privileged": true,
+  "build": {
+    "dockerfile": "Dockerfile",
+    "args": {
+      "USERNAME": "${localEnv:USER}"
+    }
+  },
+  "containerEnv": {
+    "DISPLAY": "${localEnv:DISPLAY}",
+    "WAYLAND_DISPLAY": "${localEnv:WAYLAND_DISPLAY}",
+    "XDG_RUNTIME_DIR": "${localEnv:XDG_RUNTIME_DIR}",
+    "PULSE_SERVER": "${localEnv:PULSE_SERVER}",
+    "LIBGL_ALWAYS_SOFTWARE": "0",
+    "ROS_AUTOMATIC_DISCOVERY_RANGE": "LOCALHOST",
+    "ROS_DOMAIN_ID": "42"
+  },
+  // "updateRemoteUserUID": true,
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "althack.ament-task-provider",
+        "betwo.b2-catkin-tools",
+        "charliermarsh.ruff",
+        "cschlosser.doxdocgen",
+        "jeff-hykin.better-cpp-syntax",
+        "ms-azuretools.vscode-docker",
+        "Ranch-Hand-Robotics.rde-pack",
+        "ms-python.python",
+        "ms-vscode.cpptools",
+        "pbkit.vscode-pbkit",
+        "redhat.vscode-xml",
+        "redhat.vscode-yaml",
+        "smilerobotics.urdf",
+        "twxs.cmake",
+        "yzhang.markdown-all-in-one"
+      ]
+    }
+  },
+  "workspaceMount": "source=${localWorkspaceFolder},target=/${localWorkspaceFolderBasename},type=bind",
+  "workspaceFolder": "/${localWorkspaceFolderBasename}",
+  "mounts": [
+    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.bash_history,target=/home/vscode/.bash_history,type=bind",
+    "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached",
+    "source=/dev/dri,target=/dev/dri,type=bind,consistency=cached"
+  ],
+  "initializeCommand": "xhost +local:docker",
+  "postCreateCommand": "sudo apt update && sudo rosdep fix-permissions && rosdep update && rosdep install --from-paths src --ignore-src -y && sudo chown -R $(whoami) ${containerWorkspaceFolder}"
 }
-
-},
-
-"containerEnv": {
-
-"DISPLAY": "${localEnv:DISPLAY}",
-
-"WAYLAND_DISPLAY": "${localEnv:WAYLAND_DISPLAY}",
-
-"XDG_RUNTIME_DIR": "${localEnv:XDG_RUNTIME_DIR}",
-
-"PULSE_SERVER": "${localEnv:PULSE_SERVER}",
-
-"LIBGL_ALWAYS_SOFTWARE": "0",
-
-"ROS_AUTOMATIC_DISCOVERY_RANGE": "LOCALHOST",
-
-"ROS_DOMAIN_ID": "42"
-
-},
-
-// "updateRemoteUserUID": true,
-
-"customizations": {
-
-"vscode": {
-
-"extensions": [
-
-"althack.ament-task-provider",
-
-"betwo.b2-catkin-tools",
-
-"charliermarsh.ruff",
-
-"cschlosser.doxdocgen",
-
-"jeff-hykin.better-cpp-syntax",
-
-"ms-azuretools.vscode-docker",
-
-"Ranch-Hand-Robotics.rde-pack",
-
-"ms-python.python",
-
-"ms-vscode.cpptools",
-
-"pbkit.vscode-pbkit",
-
-"redhat.vscode-xml",
-
-"redhat.vscode-yaml",
-
-"smilerobotics.urdf",
-
-"twxs.cmake",
-
-"yzhang.markdown-all-in-one"
-
-]
-
-}
-
-},
-
-"workspaceMount": "source=${localWorkspaceFolder},target=/${localWorkspaceFolderBasename},type=bind",
-
-"workspaceFolder": "/${localWorkspaceFolderBasename}",
-
-"mounts": [
-
-"source=${localEnv:HOME}${localEnv:USERPROFILE}/.bash_history,target=/home/vscode/.bash_history,type=bind",
-
-"source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached",
-
-"source=/dev/dri,target=/dev/dri,type=bind,consistency=cached"
-
-],
-
-"initializeCommand": "xhost +local:docker",
-
-"postCreateCommand": "sudo apt update && sudo rosdep fix-permissions && rosdep update && rosdep install --from-paths src --ignore-src -y && sudo chown -R $(whoami) ${containerWorkspaceFolder}"
-
-
-
-
-} 
