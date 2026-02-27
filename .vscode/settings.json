@@ -1,11 +1,9 @@
 {
     "python.autoComplete.extraPaths": [
-        "/opt/ros/humble/lib/python3.10/site-packages",
-        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+        "/opt/ros/jazzy/lib/python3.12/site-packages"
     ],
     "python.analysis.extraPaths": [
-        "/opt/ros/humble/lib/python3.10/site-packages",
-        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+        "/opt/ros/jazzy/lib/python3.12/site-packages"
     ],
     "cmake.ignoreCMakeListsMissing": true,
     "ros.distro": "humble",
@@ -132,4 +130,5 @@
         "variant": "cpp",
         "*.inc": "cpp"
     },
+    "ROS2.distro": "jazzy",
 }
