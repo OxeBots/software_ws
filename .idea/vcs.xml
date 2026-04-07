@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/oxebots_bringup" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/oxebots_comms" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/oxebots_interfaces" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/oxebots_observers" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/oxebots_strategy" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/ssl_ros_bridge" vcs="Git" />
+  </component>
+</project>
