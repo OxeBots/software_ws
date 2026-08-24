@@ -199,21 +199,9 @@
   },
   {
     "directory": "/software_ws/build/oxebots_comms",
-    "command": "/usr/bin/c++ -DBOOST_SYSTEM_DYN_LINK -DBOOST_SYSTEM_NO_LIB -DDEFAULT_RMW_IMPLEMENTATION=rmw_fastrtps_cpp -DFASTCDR_DYN_LINK -I/software_ws/src/oxebots_comms/include -I/software_ws/src/oxebots_comms/include/oxebots_comms -isystem /software_ws/install/include/oxebots_interfaces -isystem /software_ws/install/include -isystem /opt/ros/jazzy/include/rclcpp -isystem /opt/ros/jazzy/include/geometry_msgs -isystem /opt/ros/jazzy/include/action_msgs -isystem /opt/ros/jazzy/include/builtin_interfaces -isystem /opt/ros/jazzy/include/rosidl_runtime_c -isystem /opt/ros/jazzy/include/rcutils -isystem /opt/ros/jazzy/include/rosidl_typesupport_interface -isystem /opt/ros/jazzy/include/unique_identifier_msgs -isystem /opt/ros/jazzy/include/service_msgs -isystem /opt/ros/jazzy/include/std_msgs -isystem /opt/ros/jazzy/include/sensor_msgs -isystem /opt/ros/jazzy/include/fastcdr -isystem /opt/ros/jazzy/include/rosidl_runtime_cpp -isystem /opt/ros/jazzy/include/rosidl_typesupport_fastrtps_cpp -isystem /opt/ros/jazzy/include/rmw -isystem /opt/ros/jazzy/include/rosidl_dynamic_typesupport -isystem /opt/ros/jazzy/include/rosidl_typesupport_fastrtps_c -isystem /opt/ros/jazzy/include/rosidl_typesupport_introspection_c -isystem /opt/ros/jazzy/include/rosidl_typesupport_introspection_cpp -isystem /opt/ros/jazzy/include/libstatistics_collector -isystem /opt/ros/jazzy/include/rcl -isystem /opt/ros/jazzy/include/rcl_interfaces -isystem /opt/ros/jazzy/include/rcl_logging_interface -isystem /opt/ros/jazzy/include/rcl_yaml_param_parser -isystem /opt/ros/jazzy/include/type_description_interfaces -isystem /opt/ros/jazzy/include/rcpputils -isystem /opt/ros/jazzy/include/statistics_msgs -isystem /opt/ros/jazzy/include/rosgraph_msgs -isystem /opt/ros/jazzy/include/rosidl_typesupport_cpp -isystem /opt/ros/jazzy/include/rosidl_typesupport_c -isystem /opt/ros/jazzy/include/tracetools -O2 -g -DNDEBUG -std=gnu++17 -Wall -Wextra -Wpedantic -o CMakeFiles/nrf24_bridge_node.dir/src/Nrf24.cpp.o -c /software_ws/src/oxebots_comms/src/Nrf24.cpp",
+    "command": "/usr/bin/c++ -DBOOST_SYSTEM_DYN_LINK -DBOOST_SYSTEM_NO_LIB -DDEFAULT_RMW_IMPLEMENTATION=rmw_fastrtps_cpp -DFASTCDR_DYN_LINK -I/software_ws/src/oxebots_comms/include -isystem /software_ws/install/include/oxebots_interfaces -isystem /software_ws/install/include -isystem /opt/ros/jazzy/include/rclcpp -isystem /opt/ros/jazzy/include/geometry_msgs -isystem /opt/ros/jazzy/include/action_msgs -isystem /opt/ros/jazzy/include/builtin_interfaces -isystem /opt/ros/jazzy/include/rosidl_runtime_c -isystem /opt/ros/jazzy/include/rcutils -isystem /opt/ros/jazzy/include/rosidl_typesupport_interface -isystem /opt/ros/jazzy/include/unique_identifier_msgs -isystem /opt/ros/jazzy/include/service_msgs -isystem /opt/ros/jazzy/include/std_msgs -isystem /opt/ros/jazzy/include/sensor_msgs -isystem /opt/ros/jazzy/include/fastcdr -isystem /opt/ros/jazzy/include/rosidl_runtime_cpp -isystem /opt/ros/jazzy/include/rosidl_typesupport_fastrtps_cpp -isystem /opt/ros/jazzy/include/rmw -isystem /opt/ros/jazzy/include/rosidl_dynamic_typesupport -isystem /opt/ros/jazzy/include/rosidl_typesupport_fastrtps_c -isystem /opt/ros/jazzy/include/rosidl_typesupport_introspection_c -isystem /opt/ros/jazzy/include/rosidl_typesupport_introspection_cpp -isystem /opt/ros/jazzy/include/libstatistics_collector -isystem /opt/ros/jazzy/include/rcl -isystem /opt/ros/jazzy/include/rcl_interfaces -isystem /opt/ros/jazzy/include/rcl_logging_interface -isystem /opt/ros/jazzy/include/rcl_yaml_param_parser -isystem /opt/ros/jazzy/include/type_description_interfaces -isystem /opt/ros/jazzy/include/rcpputils -isystem /opt/ros/jazzy/include/statistics_msgs -isystem /opt/ros/jazzy/include/rosgraph_msgs -isystem /opt/ros/jazzy/include/rosidl_typesupport_cpp -isystem /opt/ros/jazzy/include/rosidl_typesupport_c -isystem /opt/ros/jazzy/include/tracetools -O2 -g -DNDEBUG -std=gnu++17 -Wall -Wextra -Wpedantic -o CMakeFiles/nrf24_bridge_node.dir/src/Nrf24.cpp.o -c /software_ws/src/oxebots_comms/src/Nrf24.cpp",
     "file": "/software_ws/src/oxebots_comms/src/Nrf24.cpp",
     "output": "CMakeFiles/nrf24_bridge_node.dir/src/Nrf24.cpp.o"
-  },
-  {
-    "directory": "/software_ws/build/oxebots_comms",
-    "command": "/usr/bin/cc -DBOOST_SYSTEM_DYN_LINK -DBOOST_SYSTEM_NO_LIB -DDEFAULT_RMW_IMPLEMENTATION=rmw_fastrtps_cpp -DFASTCDR_DYN_LINK -I/software_ws/src/oxebots_comms/include -I/software_ws/src/oxebots_comms/include/oxebots_comms -isystem /software_ws/install/include/oxebots_interfaces -isystem /software_ws/install/include -isystem /opt/ros/jazzy/include/rclcpp -isystem /opt/ros/jazzy/include/geometry_msgs -isystem /opt/ros/jazzy/include/action_msgs -isystem /opt/ros/jazzy/include/builtin_interfaces -isystem /opt/ros/jazzy/include/rosidl_runtime_c -isystem /opt/ros/jazzy/include/rcutils -isystem /opt/ros/jazzy/include/rosidl_typesupport_interface -isystem /opt/ros/jazzy/include/unique_identifier_msgs -isystem /opt/ros/jazzy/include/service_msgs -isystem /opt/ros/jazzy/include/std_msgs -isystem /opt/ros/jazzy/include/sensor_msgs -isystem /opt/ros/jazzy/include/fastcdr -isystem /opt/ros/jazzy/include/rosidl_runtime_cpp -isystem /opt/ros/jazzy/include/rosidl_typesupport_fastrtps_cpp -isystem /opt/ros/jazzy/include/rmw -isystem /opt/ros/jazzy/include/rosidl_dynamic_typesupport -isystem /opt/ros/jazzy/include/rosidl_typesupport_fastrtps_c -isystem /opt/ros/jazzy/include/rosidl_typesupport_introspection_c -isystem /opt/ros/jazzy/include/rosidl_typesupport_introspection_cpp -isystem /opt/ros/jazzy/include/libstatistics_collector -isystem /opt/ros/jazzy/include/rcl -isystem /opt/ros/jazzy/include/rcl_interfaces -isystem /opt/ros/jazzy/include/rcl_logging_interface -isystem /opt/ros/jazzy/include/rcl_yaml_param_parser -isystem /opt/ros/jazzy/include/type_description_interfaces -isystem /opt/ros/jazzy/include/rcpputils -isystem /opt/ros/jazzy/include/statistics_msgs -isystem /opt/ros/jazzy/include/rosgraph_msgs -isystem /opt/ros/jazzy/include/rosidl_typesupport_cpp -isystem /opt/ros/jazzy/include/rosidl_typesupport_c -isystem /opt/ros/jazzy/include/tracetools -O2 -g -DNDEBUG -Wall -Wextra -Wpedantic -o CMakeFiles/nrf24_bridge_node.dir/src/ssl_robot_protocol_bp.c.o -c /software_ws/src/oxebots_comms/src/ssl_robot_protocol_bp.c",
-    "file": "/software_ws/src/oxebots_comms/src/ssl_robot_protocol_bp.c",
-    "output": "CMakeFiles/nrf24_bridge_node.dir/src/ssl_robot_protocol_bp.c.o"
-  },
-  {
-    "directory": "/software_ws/build/oxebots_comms",
-    "command": "/usr/bin/cc -DBOOST_SYSTEM_DYN_LINK -DBOOST_SYSTEM_NO_LIB -DDEFAULT_RMW_IMPLEMENTATION=rmw_fastrtps_cpp -DFASTCDR_DYN_LINK -I/software_ws/src/oxebots_comms/include -I/software_ws/src/oxebots_comms/include/oxebots_comms -isystem /software_ws/install/include/oxebots_interfaces -isystem /software_ws/install/include -isystem /opt/ros/jazzy/include/rclcpp -isystem /opt/ros/jazzy/include/geometry_msgs -isystem /opt/ros/jazzy/include/action_msgs -isystem /opt/ros/jazzy/include/builtin_interfaces -isystem /opt/ros/jazzy/include/rosidl_runtime_c -isystem /opt/ros/jazzy/include/rcutils -isystem /opt/ros/jazzy/include/rosidl_typesupport_interface -isystem /opt/ros/jazzy/include/unique_identifier_msgs -isystem /opt/ros/jazzy/include/service_msgs -isystem /opt/ros/jazzy/include/std_msgs -isystem /opt/ros/jazzy/include/sensor_msgs -isystem /opt/ros/jazzy/include/fastcdr -isystem /opt/ros/jazzy/include/rosidl_runtime_cpp -isystem /opt/ros/jazzy/include/rosidl_typesupport_fastrtps_cpp -isystem /opt/ros/jazzy/include/rmw -isystem /opt/ros/jazzy/include/rosidl_dynamic_typesupport -isystem /opt/ros/jazzy/include/rosidl_typesupport_fastrtps_c -isystem /opt/ros/jazzy/include/rosidl_typesupport_introspection_c -isystem /opt/ros/jazzy/include/rosidl_typesupport_introspection_cpp -isystem /opt/ros/jazzy/include/libstatistics_collector -isystem /opt/ros/jazzy/include/rcl -isystem /opt/ros/jazzy/include/rcl_interfaces -isystem /opt/ros/jazzy/include/rcl_logging_interface -isystem /opt/ros/jazzy/include/rcl_yaml_param_parser -isystem /opt/ros/jazzy/include/type_description_interfaces -isystem /opt/ros/jazzy/include/rcpputils -isystem /opt/ros/jazzy/include/statistics_msgs -isystem /opt/ros/jazzy/include/rosgraph_msgs -isystem /opt/ros/jazzy/include/rosidl_typesupport_cpp -isystem /opt/ros/jazzy/include/rosidl_typesupport_c -isystem /opt/ros/jazzy/include/tracetools -O2 -g -DNDEBUG -Wall -Wextra -Wpedantic -o CMakeFiles/nrf24_bridge_node.dir/src/bitproto.c.o -c /software_ws/src/oxebots_comms/src/bitproto.c",
-    "file": "/software_ws/src/oxebots_comms/src/bitproto.c",
-    "output": "CMakeFiles/nrf24_bridge_node.dir/src/bitproto.c.o"
   },
   {
     "directory": "/software_ws/build/ssl_league_protobufs",
@@ -2629,105 +2617,117 @@
   },
   {
     "directory": "/software_ws/build/oxebots_interfaces",
-    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS  -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/grSim_Commands.pb.cc.o -c /software_ws/build/oxebots_interfaces/grSim_Commands.pb.cc",
+    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS -I/software_ws/src/oxebots_interfaces/include -I/software_ws/src/oxebots_interfaces/include/oxebots_interfaces -I/software_ws/build/oxebots_interfaces -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/grSim_Commands.pb.cc.o -c /software_ws/build/oxebots_interfaces/grSim_Commands.pb.cc",
     "file": "/software_ws/build/oxebots_interfaces/grSim_Commands.pb.cc",
     "output": "CMakeFiles/oxebots_interfaces_proto.dir/grSim_Commands.pb.cc.o"
   },
   {
     "directory": "/software_ws/build/oxebots_interfaces",
-    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS  -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/grSim_Packet.pb.cc.o -c /software_ws/build/oxebots_interfaces/grSim_Packet.pb.cc",
+    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS -I/software_ws/src/oxebots_interfaces/include -I/software_ws/src/oxebots_interfaces/include/oxebots_interfaces -I/software_ws/build/oxebots_interfaces -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/grSim_Packet.pb.cc.o -c /software_ws/build/oxebots_interfaces/grSim_Packet.pb.cc",
     "file": "/software_ws/build/oxebots_interfaces/grSim_Packet.pb.cc",
     "output": "CMakeFiles/oxebots_interfaces_proto.dir/grSim_Packet.pb.cc.o"
   },
   {
     "directory": "/software_ws/build/oxebots_interfaces",
-    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS  -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/grSim_Replacement.pb.cc.o -c /software_ws/build/oxebots_interfaces/grSim_Replacement.pb.cc",
+    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS -I/software_ws/src/oxebots_interfaces/include -I/software_ws/src/oxebots_interfaces/include/oxebots_interfaces -I/software_ws/build/oxebots_interfaces -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/grSim_Replacement.pb.cc.o -c /software_ws/build/oxebots_interfaces/grSim_Replacement.pb.cc",
     "file": "/software_ws/build/oxebots_interfaces/grSim_Replacement.pb.cc",
     "output": "CMakeFiles/oxebots_interfaces_proto.dir/grSim_Replacement.pb.cc.o"
   },
   {
     "directory": "/software_ws/build/oxebots_interfaces",
-    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS  -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/grSim_Robotstatus.pb.cc.o -c /software_ws/build/oxebots_interfaces/grSim_Robotstatus.pb.cc",
+    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS -I/software_ws/src/oxebots_interfaces/include -I/software_ws/src/oxebots_interfaces/include/oxebots_interfaces -I/software_ws/build/oxebots_interfaces -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/grSim_Robotstatus.pb.cc.o -c /software_ws/build/oxebots_interfaces/grSim_Robotstatus.pb.cc",
     "file": "/software_ws/build/oxebots_interfaces/grSim_Robotstatus.pb.cc",
     "output": "CMakeFiles/oxebots_interfaces_proto.dir/grSim_Robotstatus.pb.cc.o"
   },
   {
     "directory": "/software_ws/build/oxebots_interfaces",
-    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS  -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/ssl_simulation_config.pb.cc.o -c /software_ws/build/oxebots_interfaces/ssl_simulation_config.pb.cc",
+    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS -I/software_ws/src/oxebots_interfaces/include -I/software_ws/src/oxebots_interfaces/include/oxebots_interfaces -I/software_ws/build/oxebots_interfaces -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/ssl_simulation_config.pb.cc.o -c /software_ws/build/oxebots_interfaces/ssl_simulation_config.pb.cc",
     "file": "/software_ws/build/oxebots_interfaces/ssl_simulation_config.pb.cc",
     "output": "CMakeFiles/oxebots_interfaces_proto.dir/ssl_simulation_config.pb.cc.o"
   },
   {
     "directory": "/software_ws/build/oxebots_interfaces",
-    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS  -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/ssl_simulation_control.pb.cc.o -c /software_ws/build/oxebots_interfaces/ssl_simulation_control.pb.cc",
+    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS -I/software_ws/src/oxebots_interfaces/include -I/software_ws/src/oxebots_interfaces/include/oxebots_interfaces -I/software_ws/build/oxebots_interfaces -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/ssl_simulation_control.pb.cc.o -c /software_ws/build/oxebots_interfaces/ssl_simulation_control.pb.cc",
     "file": "/software_ws/build/oxebots_interfaces/ssl_simulation_control.pb.cc",
     "output": "CMakeFiles/oxebots_interfaces_proto.dir/ssl_simulation_control.pb.cc.o"
   },
   {
     "directory": "/software_ws/build/oxebots_interfaces",
-    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS  -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/ssl_simulation_error.pb.cc.o -c /software_ws/build/oxebots_interfaces/ssl_simulation_error.pb.cc",
+    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS -I/software_ws/src/oxebots_interfaces/include -I/software_ws/src/oxebots_interfaces/include/oxebots_interfaces -I/software_ws/build/oxebots_interfaces -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/ssl_simulation_error.pb.cc.o -c /software_ws/build/oxebots_interfaces/ssl_simulation_error.pb.cc",
     "file": "/software_ws/build/oxebots_interfaces/ssl_simulation_error.pb.cc",
     "output": "CMakeFiles/oxebots_interfaces_proto.dir/ssl_simulation_error.pb.cc.o"
   },
   {
     "directory": "/software_ws/build/oxebots_interfaces",
-    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS  -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/ssl_simulation_robot_control.pb.cc.o -c /software_ws/build/oxebots_interfaces/ssl_simulation_robot_control.pb.cc",
+    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS -I/software_ws/src/oxebots_interfaces/include -I/software_ws/src/oxebots_interfaces/include/oxebots_interfaces -I/software_ws/build/oxebots_interfaces -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/ssl_simulation_robot_control.pb.cc.o -c /software_ws/build/oxebots_interfaces/ssl_simulation_robot_control.pb.cc",
     "file": "/software_ws/build/oxebots_interfaces/ssl_simulation_robot_control.pb.cc",
     "output": "CMakeFiles/oxebots_interfaces_proto.dir/ssl_simulation_robot_control.pb.cc.o"
   },
   {
     "directory": "/software_ws/build/oxebots_interfaces",
-    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS  -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/ssl_simulation_robot_feedback.pb.cc.o -c /software_ws/build/oxebots_interfaces/ssl_simulation_robot_feedback.pb.cc",
+    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS -I/software_ws/src/oxebots_interfaces/include -I/software_ws/src/oxebots_interfaces/include/oxebots_interfaces -I/software_ws/build/oxebots_interfaces -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/ssl_simulation_robot_feedback.pb.cc.o -c /software_ws/build/oxebots_interfaces/ssl_simulation_robot_feedback.pb.cc",
     "file": "/software_ws/build/oxebots_interfaces/ssl_simulation_robot_feedback.pb.cc",
     "output": "CMakeFiles/oxebots_interfaces_proto.dir/ssl_simulation_robot_feedback.pb.cc.o"
   },
   {
     "directory": "/software_ws/build/oxebots_interfaces",
-    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS  -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/ssl_simulation_synchronous.pb.cc.o -c /software_ws/build/oxebots_interfaces/ssl_simulation_synchronous.pb.cc",
+    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS -I/software_ws/src/oxebots_interfaces/include -I/software_ws/src/oxebots_interfaces/include/oxebots_interfaces -I/software_ws/build/oxebots_interfaces -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/ssl_simulation_synchronous.pb.cc.o -c /software_ws/build/oxebots_interfaces/ssl_simulation_synchronous.pb.cc",
     "file": "/software_ws/build/oxebots_interfaces/ssl_simulation_synchronous.pb.cc",
     "output": "CMakeFiles/oxebots_interfaces_proto.dir/ssl_simulation_synchronous.pb.cc.o"
   },
   {
     "directory": "/software_ws/build/oxebots_interfaces",
-    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS  -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/ssl_gc_common.pb.cc.o -c /software_ws/build/oxebots_interfaces/ssl_gc_common.pb.cc",
+    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS -I/software_ws/src/oxebots_interfaces/include -I/software_ws/src/oxebots_interfaces/include/oxebots_interfaces -I/software_ws/build/oxebots_interfaces -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/ssl_gc_common.pb.cc.o -c /software_ws/build/oxebots_interfaces/ssl_gc_common.pb.cc",
     "file": "/software_ws/build/oxebots_interfaces/ssl_gc_common.pb.cc",
     "output": "CMakeFiles/oxebots_interfaces_proto.dir/ssl_gc_common.pb.cc.o"
   },
   {
     "directory": "/software_ws/build/oxebots_interfaces",
-    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS  -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/ssl_gc_referee_message.pb.cc.o -c /software_ws/build/oxebots_interfaces/ssl_gc_referee_message.pb.cc",
+    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS -I/software_ws/src/oxebots_interfaces/include -I/software_ws/src/oxebots_interfaces/include/oxebots_interfaces -I/software_ws/build/oxebots_interfaces -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/ssl_gc_referee_message.pb.cc.o -c /software_ws/build/oxebots_interfaces/ssl_gc_referee_message.pb.cc",
     "file": "/software_ws/build/oxebots_interfaces/ssl_gc_referee_message.pb.cc",
     "output": "CMakeFiles/oxebots_interfaces_proto.dir/ssl_gc_referee_message.pb.cc.o"
   },
   {
     "directory": "/software_ws/build/oxebots_interfaces",
-    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS  -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/ssl_gc_game_event.pb.cc.o -c /software_ws/build/oxebots_interfaces/ssl_gc_game_event.pb.cc",
+    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS -I/software_ws/src/oxebots_interfaces/include -I/software_ws/src/oxebots_interfaces/include/oxebots_interfaces -I/software_ws/build/oxebots_interfaces -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/ssl_gc_game_event.pb.cc.o -c /software_ws/build/oxebots_interfaces/ssl_gc_game_event.pb.cc",
     "file": "/software_ws/build/oxebots_interfaces/ssl_gc_game_event.pb.cc",
     "output": "CMakeFiles/oxebots_interfaces_proto.dir/ssl_gc_game_event.pb.cc.o"
   },
   {
     "directory": "/software_ws/build/oxebots_interfaces",
-    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS  -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/ssl_gc_geometry.pb.cc.o -c /software_ws/build/oxebots_interfaces/ssl_gc_geometry.pb.cc",
+    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS -I/software_ws/src/oxebots_interfaces/include -I/software_ws/src/oxebots_interfaces/include/oxebots_interfaces -I/software_ws/build/oxebots_interfaces -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/ssl_gc_geometry.pb.cc.o -c /software_ws/build/oxebots_interfaces/ssl_gc_geometry.pb.cc",
     "file": "/software_ws/build/oxebots_interfaces/ssl_gc_geometry.pb.cc",
     "output": "CMakeFiles/oxebots_interfaces_proto.dir/ssl_gc_geometry.pb.cc.o"
   },
   {
     "directory": "/software_ws/build/oxebots_interfaces",
-    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS  -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/messages_robocup_ssl_detection.pb.cc.o -c /software_ws/build/oxebots_interfaces/messages_robocup_ssl_detection.pb.cc",
+    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS -I/software_ws/src/oxebots_interfaces/include -I/software_ws/src/oxebots_interfaces/include/oxebots_interfaces -I/software_ws/build/oxebots_interfaces -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/messages_robocup_ssl_detection.pb.cc.o -c /software_ws/build/oxebots_interfaces/messages_robocup_ssl_detection.pb.cc",
     "file": "/software_ws/build/oxebots_interfaces/messages_robocup_ssl_detection.pb.cc",
     "output": "CMakeFiles/oxebots_interfaces_proto.dir/messages_robocup_ssl_detection.pb.cc.o"
   },
   {
     "directory": "/software_ws/build/oxebots_interfaces",
-    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS  -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/messages_robocup_ssl_geometry.pb.cc.o -c /software_ws/build/oxebots_interfaces/messages_robocup_ssl_geometry.pb.cc",
+    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS -I/software_ws/src/oxebots_interfaces/include -I/software_ws/src/oxebots_interfaces/include/oxebots_interfaces -I/software_ws/build/oxebots_interfaces -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/messages_robocup_ssl_geometry.pb.cc.o -c /software_ws/build/oxebots_interfaces/messages_robocup_ssl_geometry.pb.cc",
     "file": "/software_ws/build/oxebots_interfaces/messages_robocup_ssl_geometry.pb.cc",
     "output": "CMakeFiles/oxebots_interfaces_proto.dir/messages_robocup_ssl_geometry.pb.cc.o"
   },
   {
     "directory": "/software_ws/build/oxebots_interfaces",
-    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS  -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/messages_robocup_ssl_wrapper.pb.cc.o -c /software_ws/build/oxebots_interfaces/messages_robocup_ssl_wrapper.pb.cc",
+    "command": "/usr/bin/c++ -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS -I/software_ws/src/oxebots_interfaces/include -I/software_ws/src/oxebots_interfaces/include/oxebots_interfaces -I/software_ws/build/oxebots_interfaces -O2 -g -DNDEBUG -std=gnu++17 -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/messages_robocup_ssl_wrapper.pb.cc.o -c /software_ws/build/oxebots_interfaces/messages_robocup_ssl_wrapper.pb.cc",
     "file": "/software_ws/build/oxebots_interfaces/messages_robocup_ssl_wrapper.pb.cc",
     "output": "CMakeFiles/oxebots_interfaces_proto.dir/messages_robocup_ssl_wrapper.pb.cc.o"
+  },
+  {
+    "directory": "/software_ws/build/oxebots_interfaces",
+    "command": "/usr/bin/cc -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS -I/software_ws/src/oxebots_interfaces/include -I/software_ws/src/oxebots_interfaces/include/oxebots_interfaces -I/software_ws/build/oxebots_interfaces -O2 -g -DNDEBUG -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/src/bitproto.c.o -c /software_ws/src/oxebots_interfaces/src/bitproto.c",
+    "file": "/software_ws/src/oxebots_interfaces/src/bitproto.c",
+    "output": "CMakeFiles/oxebots_interfaces_proto.dir/src/bitproto.c.o"
+  },
+  {
+    "directory": "/software_ws/build/oxebots_interfaces",
+    "command": "/usr/bin/cc -DROS_PACKAGE_NAME=\\\"oxebots_interfaces\\\" -Doxebots_interfaces_proto_EXPORTS -I/software_ws/src/oxebots_interfaces/include -I/software_ws/src/oxebots_interfaces/include/oxebots_interfaces -I/software_ws/build/oxebots_interfaces -O2 -g -DNDEBUG -fPIC -Wall -Wextra -Wpedantic -Wno-deprecated-declarations -o CMakeFiles/oxebots_interfaces_proto.dir/src/ssl_robot_protocol_bp.c.o -c /software_ws/src/oxebots_interfaces/src/ssl_robot_protocol_bp.c",
+    "file": "/software_ws/src/oxebots_interfaces/src/ssl_robot_protocol_bp.c",
+    "output": "CMakeFiles/oxebots_interfaces_proto.dir/src/ssl_robot_protocol_bp.c.o"
   },
   {
     "directory": "/software_ws/build/oxebots_observers",
