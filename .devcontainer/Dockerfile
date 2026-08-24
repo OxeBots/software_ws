@@ -20,12 +20,14 @@ RUN groupadd --gid $USER_GID $USERNAME \
     && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
     && apt-get update \
     && apt-get install -y sudo python3-serial python3-pip \
+       libserialport-dev libboost-system-dev libboost-thread-dev pkg-config \
     && pip3 install bitproto \
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
 
 USER $USERNAME
 
+# Gives docker permission to acess the USB port (dialout)
 RUN sudo usermod --append --groups video,dialout $USERNAME
 
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
