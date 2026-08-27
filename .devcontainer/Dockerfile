@@ -21,7 +21,8 @@ RUN groupadd --gid $USER_GID $USERNAME \
     && apt-get update \
     && apt-get install -y sudo python3-serial python3-pip \
        libserialport-dev libboost-system-dev libboost-thread-dev pkg-config \
-    && pip3 install bitproto \
+    && pip3 install bitproto --break-system-packages \
+    && pip3 install bitprotolib --break-system-packages \
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
 
@@ -32,5 +33,5 @@ RUN sudo usermod --append --groups video,dialout $USERNAME
 
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
 
-ENV SHELL /bin/bash
+ENV SHELL=/bin/bash
 CMD ["/bin/bash"]
