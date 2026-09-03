@@ -2,3 +2,8 @@ build/
 install/
 log/
 .aider*
+
+.idea/
+__pycache__/
+*.pyc
+

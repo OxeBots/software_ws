@@ -56,7 +56,8 @@
   "mounts": [
     "source=${localEnv:HOME}${localEnv:USERPROFILE}/.bash_history,target=/home/vscode/.bash_history,type=bind",
     "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached",
-    "source=/dev/dri,target=/dev/dri,type=bind,consistency=cached"
+    "source=/dev/dri,target=/dev/dri,type=bind,consistency=cached",
+    "source=/dev,target=/dev,type=bind"
   ],
   "initializeCommand": "xhost +local:docker",
   "postCreateCommand": "sudo apt update && sudo rosdep fix-permissions && rosdep update && rosdep install --from-paths src --ignore-src -y && sudo chown -R $(whoami) ${containerWorkspaceFolder}"
