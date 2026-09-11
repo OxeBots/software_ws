@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.8)
 project(oxebots_workspace)
 
-# Só seve para o CLION não se perder, continue usando o colcon para buildar (build.sh)
+# Só seve para o CLION não se perder
+# para buildar, continue usando o colcon (build.sh)
 
 set(CMAKE_PREFIX_PATH "/opt/ros/jazzy" "${CMAKE_CURRENT_SOURCE_DIR}/install" ${CMAKE_PREFIX_PATH})
 
