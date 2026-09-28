@@ -16,4 +16,6 @@ else
     echo "Build falhou"
 fi
 
+source install/setup.bash
+
 exit $BUILD_RESULT
