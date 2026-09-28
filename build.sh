@@ -3,10 +3,15 @@
 # Set the default build type (Debug, Release, RelWithDebInfo and MinSizeRel)
 BUILD_TYPE=RelWithDebInfo
 
+# Limita a compilação para no máximo 6 núcleos no total para evitar sobrecarga de CPU
+export CMAKE_BUILD_PARALLEL_LEVEL=3
+PARALLEL_WORKERS=2
+
 colcon build \
-    --merge-install \
     --symlink-install \
-    --cmake-args "-DCMAKE_BUILD_TYPE=${BUILD_TYPE}" "-DCMAKE_EXPORT_COMPILE_COMMANDS=On"
+    --parallel-workers ${PARALLEL_WORKERS} \
+    --cmake-args "-DCMAKE_BUILD_TYPE=${BUILD_TYPE}" "-DCMAKE_EXPORT_COMPILE_COMMANDS=On" \
+    "$@"
 
 BUILD_RESULT=$?
 
