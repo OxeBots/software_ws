@@ -6,4 +6,4 @@ log/
 .idea/
 __pycache__/
 *.pyc
-
+**/imagens/*.png
