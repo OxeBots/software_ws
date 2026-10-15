@@ -18,7 +18,7 @@
 	url = git@github.com:OxeBots/oxebots_prediction.git
 [submodule "ssl_ros_bridge"]
 	path = src/ssl_ros_bridge
-	url = git@github.com:SSL-A-Team/ssl_ros_bridge.git
+	url = git@github.com:OxeBots/ssl_ros_bridge.git
 [submodule "oxebots_trajectory_analysis"]
 	path = src/oxebots_trajectory_analysis
 	url = git@github.com:OxeBots/oxebots_trajectory_analysis.git
