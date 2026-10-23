@@ -370,12 +370,12 @@ def f_slots():
            ("parede\n(wall)", -1500, -300, "#7a8ea0")]
     for r, x, y, c in pts: robo(ax, x, y, 0, c, r)
     bola(ax, 0, 0)
-    ax.set_title("Kick-off nosso e defesa, defendendo o gol da esquerda (own_goal_x < 0)", fontsize=9.5, color=AZUL, loc="left")
+    ax.set_title("Defendendo o gol da esquerda (own_goal_x < 0)", fontsize=9.5, color=AZUL, loc="left")
     ax = axs[1]; campo(ax, margem=False)
     pts = [("goleiro", L - 150, 0, AZUL2), ("defensor", 900, -520, AZUL2), ("cobrador", 280, 0, AZUL2)]
     for r, x, y, c in pts: robo(ax, x, y, math.pi, c, r)
     bola(ax, 0, 0)
-    ax.set_title("Os mesmos slots, defendendo o gol da direita (own_goal_x > 0): espelhados por side_sign", fontsize=9.5, color=AZUL, loc="left")
+    ax.set_title("Defendendo o gol da direita (own_goal_x > 0)", fontsize=9.5, color=AZUL, loc="left")
     fig.tight_layout()
     salvar(fig, "slots_legais")
 
