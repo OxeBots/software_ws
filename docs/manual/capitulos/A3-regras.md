@@ -1,0 +1,39 @@
+<!-- apendice -->
+# As regras do regulamento e onde cada uma é tratada
+
+Esta tabela relaciona as 30 regras do regulamento SSL-EL (edição de 2024-08-05) que afetam o software ao componente da arquitetura que as trata e ao cenário de teste que as verifica (Capítulo 23). *Cobertura hoje* indica o estado do sistema **atual** (Parte III): **Coberto** significa que existe um mecanismo no código (ainda sem teste automatizado); **Parcial**, que existe, mas com lacunas; **Não coberto**, que nada o trata; **Fora do software**, que depende de hardware ou de pessoas.
+
+| ID | Regra | Seção (página) | Como é tratada na arquitetura | Teste | Prio. | Cobertura hoje |
+|---|---|---|---|---|---|---|
+| R-01 | Máx. 3 robôs por time; um pode ser goleiro | §3.1 p.6 | RA assume até 3; funcionar com 2/1 (degradação) (S16/RA) | SC-23 | P1 | Parcial |
+| R-02 | Id do goleiro escolhido antes; mutável só com bola fora de jogo ou no campo adversário; via GC | §4.3.5 p.12 | usar `TeamInfo.goalkeeper`; sem `robot_id==0` fixo (S17/GC) | SC-17 | P1 | Não coberto |
+| R-03 | Autonomia total; sem entrada humana na partida | §3.2.6 p.9 | nenhum requisito de software além de não depender de operador (—) | inspeção | P2 | Fora do software |
+| R-04 | Forma ≤Ø0,18×0,15 m; dribbler não ativável | §3.2.2-3 p.7 | hardware/firmware (—) | inspeção | P2 | Fora do software |
+| R-05 | HALT: nenhum robô move/manipula; 2 s para frear | §5.1.2 p.14 | `HaltTree` + `MODE_HALT` + SafetyGate (S02/M01) | SC-02 | P0 | Parcial |
+| R-06 | STOP: <0,75 m/s; ≥0,5 m da bola; sem manipular | §5.1.1 p.14 | `StopTree` + speed cap (S04/M01) | SC-03 | P0 | Parcial |
+| R-07 | Estágios e tempos; relógio pausa em stop/halt | §4.4.1 p.12-13 | usar `stage`/`stage_time_left` (hoje `gc_stage` não é lido por nenhuma árvore) (GameState) | unit | P2 | Não coberto |
+| R-08 | Ball placement (nosso): ≤30 s, bola parada, ≤0,15 m do alvo; EL pode desabilitar | §5.2 p.14-16 | `BallPlacementOurTree` ou desabilitar (S05) | SC-12 | P1 | Não coberto |
+| R-09 | Time que não posiciona: ≥0,5 m da linha bola→alvo | §8.3.3 p.26 | `BallPlacementTheirTree` (S06) | SC-11 | P0 | Não coberto |
+| R-10 | TIMEOUT: equipes livres; robôs parados | §4.4.2 p.13; Referee 12/13 | `TimeoutTree` (S03) | SC-13 | P0 | Não coberto |
+| R-11 | Kick-off: metade própria, fora do círculo; só o cobrador no círculo | §5.3.2 p.16 | `PrepareKickoff{Our,Their}` (S07/S08) | SC-05,06 | P0 | Parcial |
+| R-12 | NORMAL_START: só o atacante manipula; não retoma partida diretamente | §5.3.1 p.16 | `restart_ctx` no GameState (G02) | SC-05,09 | P0 | Não coberto |
+| R-13 | Free kick: adversários ≥0,5 m; 1 cobrador; ponto ≥0,2 m linhas e ≥1 m área | §5.3.3 p.17 | `FreeKick{Our,Their}` (S14/S15) | SC-07,08 | P0 | Parcial |
+| R-14 | FORCE_START: ambos podem manipular | §5.3.4 p.17 | `NormalPlayTree` (S16) | SC-04 | P1 | Coberto |
+| R-15 | Pênalti: goleiro defensor na linha de gol; demais ≥1 m atrás; bola só rumo ao gol adv.; 10 s | §5.3.5 p.17-18 | `Penalty*` + `PenaltyKeeperLine` (S10-S13/K02) | SC-09,10 | P0 | Parcial |
+| R-16 | Bola em jogo após mover ≥0,05 m ou 10 s | §5.4 p.18 | `WaitBallInPlay` (S09/S14) | unit | P1 | Não coberto |
+| R-17 | Cartões amarelo/vermelho reduzem robôs; remover em 10 s | §5.5 p.19 | `max_allowed_bots` no RA; parar o robô a retirar (RA/P03) | SC-23 | P1 | Não coberto |
+| R-18 | Throw-in/goal kick/corner/aimless são free kicks | §6 p.20-21; §5.3.3 | fundir árvores em `FreeKick*` (S14/S15) | SC-07 | P1 | Parcial |
+| R-19 | Bola não pode ficar >10 s na área de defesa (goleiro) | §8.3.1 p.24 | `BallHeldTimer`+`Goalkeeper` (S17) | SC-25 | P1 | Não coberto |
+| R-20 | Sem progresso 10 s ⇒ stop e force start (GC) | §8.1 p.22 | tratado pelo GC; software só reage ao STOP (—) | SC-04 | P1 | Coberto |
+| R-21 | Atacantes ≥0,2 m da área adversária em stop/free kick (2 s de graça) | §8.3.1 p.23-24 | clamp de área + `ComputeLegalSlot` (S04/S14) | SC-07 | P0 | Parcial |
+| R-22 | Não-goleiro fora da própria área; tocar a bola dentro ⇒ pênalti | §8.3.1 p.24 | clamp em `GoToPoint`/controlador/defensor (S19) | SC-15 | P0 | Coberto |
+| R-23 | Não tocar a bola dentro da área adversária | §8.3.2 p.25 | clamp de alvo (`clampFromPenaltyArea`) (S18) | SC-24 | P0 | Coberto |
+| R-24 | Velocidade do robô ≤1,5 m/s | §8.3.2 p.25 | `max_linear_speed`=1,0 (default do código) + SafetyGate (M01) | log de v | P0 | Coberto |
+| R-25 | Bola acelerada ≤3 m/s (3D) | §8.3.2 p.25 | clamp de `kick_speed`; `PrecisionKick` viola (M02) | SC-24 | P0 | Parcial |
+| R-26 | Colisão entre robôs de times diferentes | §8.3.2 p.25 | D* com obstáculos inflados; sem teste (M06) | SC-19 | P1 | Parcial |
+| R-27 | Robot too fast in stop (0,75; 2 s de graça; 1×/robô/stop) | §8.3.3 p.25-26 | SafetyGate (M01) | SC-03 | P0 | Não coberto |
+| R-28 | Defensor ≥0,5 m da bola em kickoff/free kick adversário | §8.3.3 p.25 | `FreeKickTheir`/`PrepareKickoffTheir` (S08/S15) | SC-06,08 | P0 | Parcial |
+| R-29 | Shoot-out, emergency stop, challenge flags, substituição pelo GC | §10 p.27-28; §11-12; §9 | fora do MVP (—) | — | P2 | Não coberto |
+| R-30 | Padrão de visão, rádio, cores, hardware | §3.2.4-5 p.7-8 | hardware/organização (—) | inspeção | P2 | Fora do software |
+
+Resumo: 5 regras cobertas, 11 parciais, 11 não cobertas e 3 fora do escopo do software.
