@@ -43,4 +43,4 @@ echo "=========================================================="
 echo "Pressione Ctrl+C para encerrar a partida a qualquer momento."
 echo ""
 
-ros2 launch oxebots_bringup match.launch.py "$@"
+ros2 launch oxebots_bringup ssl-new.launch.py match:=True "$@"
