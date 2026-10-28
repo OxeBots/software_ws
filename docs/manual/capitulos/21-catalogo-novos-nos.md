@@ -79,13 +79,32 @@ Este capítulo é a **especificação** dos componentes novos e das alterações
 
 ## A mensagem GameState
 
+Definida em `oxebots_interfaces/msg/GameState.msg`:
+
 ```text
 std_msgs/Header header
 uint32  command_counter
 uint8   command
-uint8   phase              # HALT TIMEOUT STOP BALL_PLACEMENT PREPARE_KICKOFF
-                           # KICKOFF PREPARE_PENALTY PENALTY FREE_KICK RUN
-uint8   restart_ctx        # NONE KICKOFF PENALTY FREE_KICK FORCE
+
+uint8   PHASE_HALT=0
+uint8   PHASE_TIMEOUT=1
+uint8   PHASE_STOP=2
+uint8   PHASE_BALL_PLACEMENT=3
+uint8   PHASE_PREPARE_KICKOFF=4
+uint8   PHASE_KICKOFF=5
+uint8   PHASE_PREPARE_PENALTY=6
+uint8   PHASE_PENALTY=7
+uint8   PHASE_FREE_KICK=8
+uint8   PHASE_RUN=9
+uint8   phase
+
+uint8   RESTART_NONE=0
+uint8   RESTART_KICKOFF=1
+uint8   RESTART_PENALTY=2
+uint8   RESTART_FREE_KICK=3
+uint8   RESTART_FORCE=4
+uint8   restart_ctx
+
 bool    we_favored
 uint8   stage
 bool    our_goal_positive_x

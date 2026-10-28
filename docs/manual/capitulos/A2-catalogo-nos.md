@@ -89,6 +89,20 @@ As 29 folhas registradas em `strategy_node.cpp`. "Usos" é o número de ocorrên
 
 Atual: `attacker_id`, `defender_id`. Proposta: acrescenta `goalkeeper_id`, `kicker_id`, `epoch`, `active_ids[]`.
 
+### `GameState`
+
+| Campo | Tipo | Observação |
+|---|---|---|
+| `header` | `std_msgs/Header` | `stamp` de recepção local |
+| `command_counter`, `command` | `uint32`, `uint8` | contador e comando bruto do `Referee` |
+| `phase` | `uint8` | `PHASE_HALT` (0), `PHASE_TIMEOUT` (1), `PHASE_STOP` (2), `PHASE_BALL_PLACEMENT` (3), `PHASE_PREPARE_KICKOFF` (4), `PHASE_KICKOFF` (5), `PHASE_PREPARE_PENALTY` (6), `PHASE_PENALTY` (7), `PHASE_FREE_KICK` (8), `PHASE_RUN` (9) |
+| `restart_ctx` | `uint8` | `RESTART_NONE` (0), `RESTART_KICKOFF` (1), `RESTART_PENALTY` (2), `RESTART_FREE_KICK` (3), `RESTART_FORCE` (4) |
+| `we_favored`, `stage`, `our_goal_positive_x` | `bool`, `uint8`, `bool` | favorecimento, estágio e lado do nosso gol |
+| `designated_position`, `has_designated` | `Point32`, `bool` | coordenadas designadas em **mm** |
+| `speed_limit_mps`, `ball_min_distance_mm` | `float32`, `float32` | limites regulamentares da fase |
+| `can_place_ball`, `max_allowed_bots`, `our_goalkeeper_id` | `bool`, `uint8`, `uint32` | copiados de `TeamInfo` |
+| `stale` | `bool` | verdadeiro quando o GC cala além do limite (500 ms) |
+
 ### Predições
 
 `BallPrediction`: `x, y, vx, vy, ax, ay`. `RobotPrediction`: listas `allies[]`/`enemies[]` de `RobotPredictionData` com `id, x, y, vx, vy, ax, ay, orientation, vorientation`.
