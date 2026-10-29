@@ -1,0 +1,52 @@
+name: OxeBots CI - Build and Test
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: ['**']
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    container:
+      image: osrf/ros:jazzy-desktop-full
+
+    steps:
+      - name: Checkout repository and submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install system dependencies with rosdep
+        shell: bash
+        run: |
+          source /opt/ros/jazzy/setup.bash
+          rosdep update
+          rosdep install --from-paths src --ignore-src -y --rosdistro jazzy
+
+      - name: Build workspace
+        shell: bash
+        run: |
+          source /opt/ros/jazzy/setup.bash
+          export MAKEFLAGS="-j2"
+          export CMAKE_BUILD_PARALLEL_LEVEL=2
+          colcon build --symlink-install --parallel-workers 2 --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo
+
+      - name: Run unit test suite
+        shell: bash
+        run: |
+          source /opt/ros/jazzy/setup.bash
+          source install/setup.bash
+          colcon test --parallel-workers 2 --packages-select oxebots_observers oxebots_prediction oxebots_strategy oxebots_comms oxebots_trajectory_analysis
+
+      - name: Validate test results
+        shell: bash
+        run: |
+          source /opt/ros/jazzy/setup.bash
+          echo "=== Relatório dos Testes Unitários de Lógica ==="
+          colcon test-result --test-result-base build/oxebots_observers --verbose
+          colcon test-result --test-result-base build/oxebots_prediction --verbose
+          colcon test-result --test-result-base build/oxebots_strategy --verbose
+          colcon test-result --test-result-base build/oxebots_comms --verbose
+          colcon test-result --test-result-base build/oxebots_trajectory_analysis --verbose
