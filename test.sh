@@ -90,6 +90,10 @@ for f in xml_files:
 
 print("-" * len(header))
 print(f"TOTAL: {total_tests} testes executados | FALHAS/ERROS: {total_failures}")
+
+if total_failures > 0 or total_tests == 0:
+    import sys
+    sys.exit(1)
 EOF
 
-echo ""
+exit $?

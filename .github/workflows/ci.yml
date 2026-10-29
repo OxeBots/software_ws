@@ -13,6 +13,9 @@ jobs:
       image: osrf/ros:jazzy-desktop-full
 
     steps:
+      - name: Configure Git safe directory
+        run: git config --global --add safe.directory '*'
+
       - name: Checkout repository and submodules
         uses: actions/checkout@v4
         with:
@@ -22,6 +25,7 @@ jobs:
         shell: bash
         run: |
           source /opt/ros/jazzy/setup.bash
+          apt-get update
           rosdep update
           rosdep install --from-paths src --ignore-src -y --rosdistro jazzy
 
@@ -37,16 +41,4 @@ jobs:
         shell: bash
         run: |
           source /opt/ros/jazzy/setup.bash
-          source install/setup.bash
-          colcon test --parallel-workers 2 --packages-select oxebots_observers oxebots_prediction oxebots_strategy oxebots_comms oxebots_trajectory_analysis
-
-      - name: Validate test results
-        shell: bash
-        run: |
-          source /opt/ros/jazzy/setup.bash
-          echo "=== Relatório dos Testes Unitários de Lógica ==="
-          colcon test-result --test-result-base build/oxebots_observers --verbose
-          colcon test-result --test-result-base build/oxebots_prediction --verbose
-          colcon test-result --test-result-base build/oxebots_strategy --verbose
-          colcon test-result --test-result-base build/oxebots_comms --verbose
-          colcon test-result --test-result-base build/oxebots_trajectory_analysis --verbose
+          ./test.sh
