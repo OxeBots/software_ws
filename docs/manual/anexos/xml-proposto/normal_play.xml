@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!-- PROPOSTA. S16 NormalPlayTree. AttackerTree = extração de master_strategy_carry.xml linhas 76-135
+     (sem PrecisionKick; KickBall com kick_speed <= 3.0). GoalkeeperTree/DefenderTree existentes
+     (com AD de 08). Substitui IsMyRole/IsRobotId por HasRole. -->
+<root BTCPP_format="4">
+  <BehaviorTree ID="NormalPlayTree">
+    <ReactiveFallback name="Roles">
+      <ReactiveSequence name="GoalkeeperRole">
+        <HasRole role="goalkeeper"/>
+        <SubTree ID="GoalkeeperTree" _autoremap="true"/>
+      </ReactiveSequence>
+      <ReactiveSequence name="AttackerRole">
+        <HasRole role="attacker"/>
+        <SubTree ID="AttackerTree" _autoremap="true"/>
+      </ReactiveSequence>
+      <ReactiveSequence name="DefenderRole">
+        <HasRole role="defender"/>
+        <SubTree ID="DefenderTree" _autoremap="true"/>
+      </ReactiveSequence>
+      <Halt reason="idle"/>
+    </ReactiveFallback>
+  </BehaviorTree>
+  <!-- TODO: BehaviorTree ID="AttackerTree" = corpo de AttackerRole do carry (RetryUntilSuccessful(-1) +
+       ReactiveSequence: UpdateBallPosition, CalculateInterception, ReactiveFallback ChaseAndKick) -->
+</root>
