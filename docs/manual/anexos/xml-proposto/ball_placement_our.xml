@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!-- PROPOSTA. S05 (pós-MVP / opcional: EL pode desabilitar o ball placement, p.16). -->
+<root BTCPP_format="4">
+  <BehaviorTree ID="BallPlacementOurTree">
+    <ReactiveFallback name="PlacementRoles">
+      <ReactiveSequence name="PlacerRole">
+        <HasRole role="kicker"/>
+        <ComputePlacementApproach designated_x="{designated_x}" designated_y="{designated_y}"
+                                  pickup_x="{pickup_x}" pickup_y="{pickup_y}"
+                                  drop_x="{drop_x}" drop_y="{drop_y}" approach_w="{approach_w}"/>
+        <GoToPoint robot_id="{robot_id}" x="{pickup_x}" y="{pickup_y}"
+                   face_x="{drop_x}" face_y="{drop_y}" tolerance="50.0"/>
+        <PlaceBall drop_x="{drop_x}" drop_y="{drop_y}" timeout_s="30.0" tolerance_mm="150.0"/>
+      </ReactiveSequence>
+      <!-- Demais robôs: respeitam STOP -->
+      <SubTree ID="StopSubTree" _autoremap="true"/>
+    </ReactiveFallback>
+  </BehaviorTree>
+</root>
