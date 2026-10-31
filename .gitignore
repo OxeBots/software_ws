@@ -7,5 +7,7 @@ log/
 __pycache__/
 *.pyc
 **/imagens/*.png
+
+# Gerado a cada build (colcon/CMake); nao deve ser versionado
 compile_commands.json
 .claude/
