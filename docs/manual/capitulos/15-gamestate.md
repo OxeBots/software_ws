@@ -21,8 +21,8 @@ A solução é um componente que **interpreta uma vez, corretamente**, e entrega
 | `header.stamp` | tempo | instante de recepção, no relógio local |
 | `command_counter` | `uint32` | contador do `Referee`; usado para descartar repetições |
 | `command` | `uint8` | comando cru, só para diagnóstico |
-| `phase` | `uint8` (enum) | **a fase de jogo**: `HALT`, `TIMEOUT`, `STOP`, `BALL_PLACEMENT`, `PREPARE_KICKOFF`, `KICKOFF`, `PREPARE_PENALTY`, `PENALTY`, `FREE_KICK`, `RUN` |
-| `restart_ctx` | `uint8` (enum) | contexto do reinício: `NONE`, `KICKOFF`, `PENALTY`, `FREE_KICK`, `FORCE` |
+| `phase` | `uint8` (enum) | **a fase de jogo**: `PHASE_HALT` (0), `PHASE_TIMEOUT` (1), `PHASE_STOP` (2), `PHASE_BALL_PLACEMENT` (3), `PHASE_PREPARE_KICKOFF` (4), `PHASE_KICKOFF` (5), `PHASE_PREPARE_PENALTY` (6), `PHASE_PENALTY` (7), `PHASE_FREE_KICK` (8), `PHASE_RUN` (9) |
+| `restart_ctx` | `uint8` (enum) | contexto do reinício: `RESTART_NONE` (0), `RESTART_KICKOFF` (1), `RESTART_PENALTY` (2), `RESTART_FREE_KICK` (3), `RESTART_FORCE` (4) |
 | `we_favored` | `bool` | o reinício em curso é **a nosso favor** |
 | `stage` | `uint8` | estágio da partida (tempo, intervalo…) |
 | `our_goal_positive_x` | `bool` | o nosso gol está no lado de x positivo |
@@ -48,9 +48,33 @@ O GC publica o mesmo comando várias vezes por segundo. O nó só processa uma m
 
 ### 2. Mapear o comando para a fase
 
-O mapeamento está na {{fig:mapa_comando_fase}}:
+O mapeamento está na {{fig:mapa_comando_fase}} e detalhado na tabela oficial abaixo (considerando `is_yellow_team` e o contexto anterior `prev_ctx` / `prev_favored`):
 
 ![Como cada comando do árbitro é traduzido para uma fase do jogo](figuras/mapa_comando_fase.png)
+
+| `Referee.command` (ID) | `phase` resultante | `restart_ctx` resultante | `we_favored` | `speed_limit_mps` | `ball_min_distance_mm` | Observação |
+|---|---|---|---|---|---|---|
+| *(Inicial — sem GC)* | `PHASE_HALT` (0) | `RESTART_NONE` (0) | `false` | `0,0` | `0,0` | `stale = true` até o 1º pacote |
+| `HALT` (0) | `PHASE_HALT` (0) | *(mantém `prev_ctx`)* | *(mantém `prev_favored`)* | `0,0` | `0,0` | Preserva contexto de preparação |
+| `STOP` (1) | `PHASE_STOP` (2) | *(mantém `prev_ctx`)* | *(mantém `prev_favored`)* | `0,75` | `500,0` | Preserva contexto de preparação |
+| `NORMAL_START` (2) c/ `prev_ctx == KICKOFF` | `PHASE_KICKOFF` (5) | `RESTART_KICKOFF` (1) | *(herda `prev_favored`)* | `1,5` | `0,0` se `we_favored` senão `500,0` | Vai a `PHASE_RUN` quando bola move ≥ 50 mm ou 10 s |
+| `NORMAL_START` (2) c/ `prev_ctx == PENALTY` | `PHASE_PENALTY` (7) | `RESTART_PENALTY` (2) | *(herda `prev_favored`)* | `1,5` | `0,0` (regra de 1 m atrás da bola) | Até 10 s (GC encerra com STOP/GOAL) |
+| `NORMAL_START` (2) c/ outro `prev_ctx` | `PHASE_RUN` (9) | `RESTART_NONE` (0) | `false` | `1,5` | `0,0` | Fallback caso o nó inicie sem ter visto o `PREPARE_*` |
+| `FORCE_START` (3) | `PHASE_RUN` (9) | `RESTART_FORCE` (4) | `false` | `1,5` | `0,0` | Bola em jogo imediatamente |
+| `PREPARE_KICKOFF_YELLOW` (4) | `PHASE_PREPARE_KICKOFF` (4) | `RESTART_KICKOFF` (1) | `is_yellow_team` | `0,75` | `500,0` | — |
+| `PREPARE_KICKOFF_BLUE` (5) | `PHASE_PREPARE_KICKOFF` (4) | `RESTART_KICKOFF` (1) | `!is_yellow_team` | `0,75` | `500,0` | — |
+| `PREPARE_PENALTY_YELLOW` (6) | `PHASE_PREPARE_PENALTY` (6) | `RESTART_PENALTY` (2) | `is_yellow_team` | `0,75` | `500,0` | — |
+| `PREPARE_PENALTY_BLUE` (7) | `PHASE_PREPARE_PENALTY` (6) | `RESTART_PENALTY` (2) | `!is_yellow_team` | `0,75` | `500,0` | — |
+| `DIRECT_FREE_YELLOW` (8) | `PHASE_FREE_KICK` (8) | `RESTART_FREE_KICK` (3) | `is_yellow_team` | `1,5` | `0,0` se `we_favored` senão `500,0` | Vai a `PHASE_RUN` quando bola move ≥ 50 mm ou 10 s |
+| `DIRECT_FREE_BLUE` (9) | `PHASE_FREE_KICK` (8) | `RESTART_FREE_KICK` (3) | `!is_yellow_team` | `1,5` | `0,0` se `we_favored` senão `500,0` | Idem |
+| `INDIRECT_FREE_YELLOW` (10, legado) | `PHASE_FREE_KICK` (8) | `RESTART_FREE_KICK` (3) | `is_yellow_team` | `1,5` | `0,0` se `we_favored` senão `500,0` | Normalizado para `FREE_KICK` |
+| `INDIRECT_FREE_BLUE` (11, legado) | `PHASE_FREE_KICK` (8) | `RESTART_FREE_KICK` (3) | `!is_yellow_team` | `1,5` | `0,0` se `we_favored` senão `500,0` | Normalizado para `FREE_KICK` |
+| `TIMEOUT_YELLOW` (12) | `PHASE_TIMEOUT` (1) | *(mantém `prev_ctx`)* | `is_yellow_team` | `0,0` | `0,0` | Equipes paradas |
+| `TIMEOUT_BLUE` (13) | `PHASE_TIMEOUT` (1) | *(mantém `prev_ctx`)* | `!is_yellow_team` | `0,0` | `0,0` | Equipes paradas |
+| `GOAL_YELLOW` (14, legado) | `PHASE_STOP` (2) | `RESTART_NONE` (0) | `is_yellow_team` | `0,75` | `500,0` | Normalizado para `STOP` |
+| `GOAL_BLUE` (15, legado) | `PHASE_STOP` (2) | `RESTART_NONE` (0) | `!is_yellow_team` | `0,75` | `500,0` | Normalizado para `STOP` |
+| `BALL_PLACEMENT_YELLOW` (16) | `PHASE_BALL_PLACEMENT` (3) | *(mantém `prev_ctx`)* | `is_yellow_team` | `0,75` | `0,0` se `(we_favored && can_place_ball)` senão `500,0` | `has_designated = !designated_position.empty()` |
+| `BALL_PLACEMENT_BLUE` (17) | `PHASE_BALL_PLACEMENT` (3) | *(mantém `prev_ctx`)* | `!is_yellow_team` | `0,75` | `0,0` se `(we_favored && can_place_ball)` senão `500,0` | Idem |
 
 Os comandos legados (`INDIRECT_FREE` 10/11 e `GOAL` 14/15) são normalizados: os primeiros viram `FREE_KICK`; os segundos, `STOP`.
 

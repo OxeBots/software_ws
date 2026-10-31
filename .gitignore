@@ -10,3 +10,4 @@ __pycache__/
 
 # Gerado a cada build (colcon/CMake); nao deve ser versionado
 compile_commands.json
+.claude/
