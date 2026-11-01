@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+<!--
+  PROPOSTA — especificação NÃO EXECUTÁVEL até que os nós NOVOS existam e estejam registrados:
+  CheckGameState, WeAreFavored, IsDataFresh, HasRole, ComputeLegalSlot, HoldPosition, SetMotionLimit,
+  KickOnce, WaitBallInPlay, PlaceBall, ComputePlacementApproach, AvoidPlacementCorridor,
+  PenaltyKeeperLine, BallHeldTimer. Nós EXISTENTES usados: ReactiveFallback, ReactiveSequence,
+  Sequence, Fallback, Inverter, SubTree, Halt, GoToPoint, IsBallClose, UpdateBallPosition, Goalkeeper.
+  Regra: TODA guarda de ramo é ReactiveSequence (reavaliada a cada tick).
+  Ver o Capítulo 16 do manual.
+-->
+<root BTCPP_format="4" main_tree_to_execute="MainTreeEL">
+  <BehaviorTree ID="MainTreeEL">
+    <ReactiveFallback name="MasterEL">
+
+      <!-- 0. Segurança: dado velho/ausente -> parado -->
+      <ReactiveSequence name="SafetyGuard">
+        <Inverter>
+          <IsDataFresh max_gc_ms="500" max_pose_ms="150" max_ball_ms="300"/>
+        </Inverter>
+        <SubTree ID="DegradedModeTree" _autoremap="true"/>
+      </ReactiveSequence>
+
+      <!-- 1. HALT -->
+      <ReactiveSequence name="HaltBranch">
+        <CheckGameState phase="HALT"/>
+        <SubTree ID="HaltSubTree" _autoremap="true"/>
+      </ReactiveSequence>
+
+      <!-- 2. TIMEOUT -->
+      <ReactiveSequence name="TimeoutBranch">
+        <CheckGameState phase="TIMEOUT"/>
+        <SubTree ID="TimeoutTree" _autoremap="true"/>
+      </ReactiveSequence>
+
+      <!-- 3. STOP -->
+      <ReactiveSequence name="StopBranch">
+        <CheckGameState phase="STOP"/>
+        <SubTree ID="StopSubTree" _autoremap="true"/>
+      </ReactiveSequence>
+
+      <!-- 4. BALL PLACEMENT -->
+      <ReactiveSequence name="BallPlacementBranch">
+        <CheckGameState phase="BALL_PLACEMENT"/>
+        <ReactiveFallback name="PlacementOurOrTheir">
+          <ReactiveSequence name="PlacementOur">
+            <WeAreFavored/>
+            <SubTree ID="BallPlacementOurTree" _autoremap="true"/>
+          </ReactiveSequence>
+          <SubTree ID="BallPlacementTheirTree" _autoremap="true"/>
+        </ReactiveFallback>
+      </ReactiveSequence>
+
+      <!-- 5. PREPARE KICKOFF -->
+      <ReactiveSequence name="PrepareKickoffBranch">
+        <CheckGameState phase="PREPARE_KICKOFF"/>
+        <ReactiveFallback>
+          <ReactiveSequence>
+            <WeAreFavored/>
+            <SubTree ID="PrepareKickoffOurTree" _autoremap="true"/>
+          </ReactiveSequence>
+          <SubTree ID="PrepareKickoffTheirTree" _autoremap="true"/>
+        </ReactiveFallback>
+      </ReactiveSequence>
+
+      <!-- 6. KICKOFF (NORMAL_START com restart_ctx=KICKOFF) -->
+      <ReactiveSequence name="KickoffBranch">
+        <CheckGameState phase="KICKOFF"/>
+        <ReactiveFallback>
+          <ReactiveSequence>
+            <WeAreFavored/>
+            <SubTree ID="KickoffExecuteOurTree" _autoremap="true"/>
+          </ReactiveSequence>
+          <SubTree ID="PrepareKickoffTheirTree" _autoremap="true"/>
+        </ReactiveFallback>
+      </ReactiveSequence>
+
+      <!-- 7. PREPARE PENALTY -->
+      <ReactiveSequence name="PreparePenaltyBranch">
+        <CheckGameState phase="PREPARE_PENALTY"/>
+        <ReactiveFallback>
+          <ReactiveSequence>
+            <WeAreFavored/>
+            <SubTree ID="PreparePenaltyOurTree" _autoremap="true"/>
+          </ReactiveSequence>
+          <SubTree ID="PreparePenaltyTheirTree" _autoremap="true"/>
+        </ReactiveFallback>
+      </ReactiveSequence>
+
+      <!-- 8. PENALTY (NORMAL_START com restart_ctx=PENALTY) -->
+      <ReactiveSequence name="PenaltyBranch">
+        <CheckGameState phase="PENALTY"/>
+        <ReactiveFallback>
+          <ReactiveSequence>
+            <WeAreFavored/>
+            <SubTree ID="PenaltyExecuteOurTree" _autoremap="true"/>
+          </ReactiveSequence>
+          <SubTree ID="PenaltyDefendTheirTree" _autoremap="true"/>
+        </ReactiveFallback>
+      </ReactiveSequence>
+
+      <!-- 9. FREE KICK (inclui lateral, escanteio, tiro de meta) -->
+      <ReactiveSequence name="FreeKickBranch">
+        <CheckGameState phase="FREE_KICK"/>
+        <ReactiveFallback>
+          <ReactiveSequence>
+            <WeAreFavored/>
+            <SubTree ID="FreeKickOurTree" _autoremap="true"/>
+          </ReactiveSequence>
+          <SubTree ID="FreeKickTheirTree" _autoremap="true"/>
+        </ReactiveFallback>
+      </ReactiveSequence>
+
+      <!-- 10. JOGO CORRIDO (FORCE_START / Run) -->
+      <ReactiveSequence name="RunBranch">
+        <CheckGameState phase="RUN"/>
+        <SubTree ID="NormalPlayTree" _autoremap="true"/>
+      </ReactiveSequence>
+
+      <!-- 11. Estado desconhecido: parado (seguro por padrão) -->
+      <Halt reason="unknown_phase"/>
+
+    </ReactiveFallback>
+  </BehaviorTree>
+</root>

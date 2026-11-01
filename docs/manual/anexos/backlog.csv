@@ -1,0 +1,50 @@
+TASK-ID,frente,titulo,resultado esperado,arquivos/componentes,pre-requisitos,interface/contrato,esforco(P/M/G),risco(B/M/A),prioridade,teste de aceite,semana sugerida,responsavel
+G01,GC,Definir GameState.msg e mapa comando->fase,Msg `GameState` + tabela de mapeamento aprovada,oxebots_interfaces/msg/GameState.msg; docs 08,—,GameState (08 §3),P,B,P0,revisão por 2 frentes; msg compila,1,a definir
+G02,GC,"referee_state_node: núcleo (dedupe, restart_ctx, side)",Nó publica /game_state correto para toda a tabela de comandos,oxebots_strategy/src/referee_state_node.cpp (novo),G01,/game_state,M,M,P0,SC-21 + replay do GC,1,a definir
+G03,GC,referee_state_node: flags derivadas e limites,"speed_limit, ball_min_distance, can_place_ball, we_favored",idem,G02,/game_state,P,B,P0,unit de mapeamento,1,a definir
+G04,GC,Detecção de GC stale/perdido,`stale` e `gc_age` corretos,idem,G02,/game_state.stale,P,B,P0,"SC-01, SC-20",1,a definir
+G05,GC,Launch/params do referee_state_node e cor do time,Nó lançado por `ssl-new.launch.py` (team e match),oxebots_bringup/launch; YAML,G02,parâmetros,P,B,P0,launch sobe nos 2 domínios,1,a definir
+G06,GC,Lançar team client (SetDesiredKeeper/SubstituteBot),Serviços acessíveis; troca de goleiro via GC,bringup; ssl_ros_bridge/team_client,G02,serviços,M,M,P2,teste manual com GC,4,a definir
+A01,MASTER,Condições CheckGameState/WeAreFavored/IsDataFresh/HasRole,4 folhas registradas + testadas,strategy/src/*; strategy_node.cpp,"G01,D03",portas 08,M,B,P0,T04 unitários,1,a definir
+A02,MASTER,Master v2: SafetyGuard + HALT/TIMEOUT/STOP + esqueleto das fases,"`MainTreeEL` carregável, ramos 0-3 funcionais, demais com `Halt`",behavior_trees/master_strategy_el.xml,"A01,E01",XML 04 §3,M,M,P0,"SC-01,02,03,13",1,a definir
+A03,MASTER,Limpar IDs duplicados e mover legados,`legacy/` fora do install; IDs únicos,behavior_trees/*; CMakeLists install,A02,—,P,B,P1,validador estático T02 sem duplicatas,2,a definir
+A04,MASTER,Observabilidade: logger de transição + /strategy/active_branch,tópico + log INFO por transição,strategy_node.cpp,A02,/strategy/active_branch,M,B,P1,bag mostra ramo por fase,2,a definir
+A05,MASTER,Registro de nós em arquivo único + TreeNodesModel,"`node_registry.cpp`, modelo XML p/ Groot",strategy_node.cpp,A01,—,P,B,P1,Groot2 carrega modelo,2,a definir
+A06,MASTER,Montagem final: ramos 4-10 do mestre e NormalPlayTree,mestre completo,master_strategy_el.xml,"E01..E10,K01,P02",XML,M,M,P1,SC-04..SC-16,3,a definir
+D01,DADOS,"GameData com stamp, expiração de robôs, publicar sem bola, multi-câmera",msg+observer atualizados,oxebots_interfaces/GameData.msg; observers/game_observer_node.cpp,—,GameData.header,M,A,P0,SC-20; unit do observer,1,a definir
+D02,DADOS,Fixar submódulos em tags + corrigir package.xml (rosdep) + docs Jazzy,`rosdep` limpo; tags registradas,*/package.xml; README,—,—,P,B,P1,máquina limpa compila,2,a definir
+D03,DADOS,Esquema da blackboard + side_sign/own_goal por blue_team_on_positive_half,chaves de 05 §2; `is_yellow` deixa de ser 'efetiva',strategy_node.cpp,G02,bb,M,M,P0,SC-22 (ambos os lados),1,a definir
+D04,DADOS,Remover coordenadas literais dependentes de lado dos XML,nenhum literal com sinal fixo em árvores de produção,behavior_trees/*,"D03,N05",—,M,M,P0,teste p/ amarelo e azul idêntico,2,a definir
+M01,MOV,SafetyGate no movement_calculation_node,speed cap por fase + watchdog 500 ms + clamp de chute,strategy/src/movement_calculation.cpp,G01,/game_state; /robot_motion_limit,M,A,P0,"SC-02,03,26",1,a definir
+M02,MOV,"PrecisionKick: clamp ≤3,0 e via override (ou aposentar)",nenhum `/robot_commands` fora do controlador,precision_kick_node.cpp,M01,—,P,M,P0,SC-24,1,a definir
+M03,MOV,"GoToPoint: onHalted, robot_id, robô ausente, max_speed",A01 de 08 aplicado,go_to_point_node.cpp; RobotGoal.msg,—,portas,M,M,P0,SC-14; unit,1,a definir
+M04,MOV,KeepDistance corrigido + HoldPosition + SetMotionLimit,3 folhas,keep_distance.cpp; novos,M01,portas,M,B,P0,T04,1,a definir
+M05,MOV,PlaceBall + ComputePlacementApproach,empurra bola ao alvo em ≤30 s,novos,"M03,G03",portas,G,A,P2,SC-12,3,a definir
+M06,MOV,Revisar D*: alvo em obstáculo/aliados inflados/rota vazia,comportamento definido p/ alvo inviável,d_star_planner.cpp,—,/robot_i/path,M,M,P1,SC-19,2,a definir
+E01,ESTRAT,StopTree (S04) + ComputeLegalSlot (N05),STOP legal,stop.xml; novos,"M03,M04,D03",XML/portas,M,M,P0,SC-03,1,a definir
+E02,ESTRAT,HaltTree/TimeoutTree/DegradedModeTree,3 árvores,halt.xml; timeout.xml; degraded_mode.xml,A01,XML,P,B,P0,"SC-01,02,13",1,a definir
+E03,ESTRAT,BallPlacementTheir + AvoidPlacementCorridor,evita corredor,novos,E01,XML,M,M,P0,SC-11,2,a definir
+E04,ESTRAT,BallPlacementOur (ou modo desabilitado combinado com árbitro),S05,novos,"M05,G03",XML,M,M,P2,SC-12,3,a definir
+E05,ESTRAT,PrepareKickoff our/their + KickoffExecute,"kickoff legal, 2 lados",novos,"E01,P02,E08",XML,M,M,P0,"SC-05,06",2,a definir
+E06,ESTRAT,Penalty: prepare/execute our/their,pênalti legal,novos,"E05,K02",XML,M,M,P0,"SC-09,10",3,a definir
+E07,ESTRAT,FreeKickOur/Their unificadas (remove corner/throw-in/kick-in),free kick legal,novos,E05,XML,M,M,P0,"SC-07,08",2,a definir
+E08,ESTRAT,KickOnce + WaitBallInPlay + RestartKickerTree,helper de reinício,novos,M02,portas,M,M,P0,T04; SC-05,2,a definir
+E09,ESTRAT,AttackerTree extraída do carry (sem PrecisionKick),S18,attacker_tree.xml,E08,XML,P,B,P1,SC-24,2,a definir
+E10,ESTRAT,DefenderTree side-aware + HasRole,S19,defender_tree.xml,D03,XML,P,B,P1,"SC-15,17",2,a definir
+K01,GK,"Goalkeeper: id via GC/HasRole, FAILURE sem dados, limite de posse 10 s",A04 aplicado,goalkeeper_node.cpp,"A01,P02",portas,M,M,P1,"SC-17,25",2,a definir
+K02,GK,Goalkeeper pênalti (PenaltyKeeperLine) e hold,modo pênalti,novos,K01,portas,M,M,P0,SC-10,3,a definir
+P01,PAPEIS,"role_assigner: fase, cobrador travado, goleiro do GC, robôs ativos",A08 aplicado,role_assigner_node.cpp,G02,RoleAssignment,M,M,P1,"SC-16,18",2,a definir
+P02,PAPEIS,Ampliar RoleAssignment + consumo no strategy_node (epoch),msg + blackboard `role`,RoleAssignment.msg; strategy_node.cpp,P01,msg,M,M,P1,unit RA,2,a definir
+P03,PAPEIS,Degradação: robô perdido / cartão amarelo,2 e 1 robô ativos,RA; árvores,P02,—,M,M,P1,SC-23,3,a definir
+P04,PAPEIS,Ajuste de histerese e testes de troca em RUNNING,parâmetros calibrados,RA params,"P02,E09,E10",—,P,B,P2,"SC-15,16",4,a definir
+T01,TESTE,Harness de semântica BT (ReactiveSequence/Retry/Parallel…) na versão do container,gtest passa na 4.10.0,strategy/test/,—,—,M,B,P0,CI local verde,1,a definir
+T02,TESTE,"Validador estático de XML (IDs, portas sem default, subárvores)",script que falha em D-04/D-10,scripts/validate_bt.*,—,—,M,B,P0,detecta KeepDistance/AimAt atuais,1,a definir
+T03,TESTE,Captura/replay de GC com log2bag; resolver H-01,bag de GC com todos os comandos + decisão sobre Run,ssl_ros_bridge/log2bag,—,bag,M,M,P0,H-01 respondida,1,a definir
+T04,TESTE,Testes unitários de folhas/condições novas,gtest por folha,strategy/test/,"A01,M04",—,G,B,P1,cobertura das folhas P0,2,a definir
+T05,TESTE,Testes da Master Tree com blackboard mock,gtest ramos 0-11,strategy/test/,A02,—,M,B,P1,SC-xx automatizados,3,a definir
+T06,TESTE,launch_testing: HALT preempta ≤300 ms,teste de integração,strategy/test/,"A02,M01",—,M,M,P1,SC-02,3,a definir
+T07,TESTE,Checklist de conformidade REQ + scripts grSim/GC,planilha com status por REQ,docs/11; scripts,A06,—,M,B,P1,100% REQ P0 verdes,4,a definir
+T08,TESTE,"Robustez: perda de GC/visão, SIGSTOP, latência","SC-20,21,26",scripts,"M01,G04",—,M,M,P1,"SC-20,21,26",4,a definir
+T09,TESTE,Partidas completas simuladas + análise de logs,2×5 min sem fouls de software,run_match.sh,A06,—,G,M,P1,critério 8 de 11 §2,4,a definir
+X01,DOC,"Atualizar READMEs (Jazzy, parâmetros reais)",docs coerentes,READMEs,—,—,P,B,P1,revisão,2,a definir
+X02,DOC,Manter catálogo de folhas/árvores e matriz,"docs/06,07 e CSV atualizados por PR",docs/,todas,—,P,B,P1,checklist de PR,4,a definir

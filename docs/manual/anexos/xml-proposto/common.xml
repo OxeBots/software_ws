@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!-- PROPOSTA (não executável até os nós novos existirem). Subárvores comuns: S01, S02, S03, S20, S21 -->
+<root BTCPP_format="4">
+
+  <BehaviorTree ID="DegradedModeTree">
+    <Halt reason="stale_data"/>
+  </BehaviorTree>
+
+  <!-- ID mantido do arquivo existente halt.xml -->
+  <BehaviorTree ID="HaltSubTree">
+    <Halt reason="gc_halt"/>
+  </BehaviorTree>
+
+  <BehaviorTree ID="TimeoutTree">
+    <Halt reason="timeout"/>
+  </BehaviorTree>
+
+  <!-- Ports: target_x, target_y (alvo do chute), kick_speed (<=3.0) -->
+  <BehaviorTree ID="RestartKickerTree">
+    <Sequence name="AlignThenKick">
+      <UpdateBallPosition robot_id="{robot_id}" goal_x="{target_x}" goal_y="{target_y}"
+                          ball_x="{ball_x}" ball_y="{ball_y}"
+                          pre_kick_x="{pkx}" pre_kick_y="{pky}"
+                          is_ready_to_kick="{rk_ready}" ball_in_enemy_half="{rk_adv}"/>
+      <GoToPoint robot_id="{robot_id}" x="{pkx}" y="{pky}"
+                 face_x="{target_x}" face_y="{target_y}" tolerance="50.0"
+                 ball_contact_threshold_mm="150.0"/>
+      <!-- TODO(NV): KickOnce (clamp 3.0 m/s, timeout 10 s, SUCCESS quando a bola move >= 50 mm) -->
+      <KickOnce robot_id="{robot_id}" target_x="{target_x}" target_y="{target_y}"
+                kick_speed="2.5" timeout_s="10.0"/>
+    </Sequence>
+  </BehaviorTree>
+
+  <!-- Port: slot (kickoff_def | wall | retreat | ...) -->
+  <BehaviorTree ID="RetreatToLegalPositionTree">
+    <ReactiveSequence name="Retreat">
+      <ComputeLegalSlot slot="{slot}" index="0" slot_x="{slot_x}" slot_y="{slot_y}" slot_w="{slot_w}"/>
+      <GoToPoint robot_id="{robot_id}" x="{slot_x}" y="{slot_y}"
+                 face_x="{ball_x}" face_y="{ball_y}" tolerance="80.0"/>
+    </ReactiveSequence>
+  </BehaviorTree>
+
+</root>

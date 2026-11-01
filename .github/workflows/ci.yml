@@ -26,7 +26,7 @@ jobs:
         shell: bash
         run: |
           TARGET_BRANCH="${{ github.base_ref }}"
-          git fetch origin "$TARGET_BRANCH"
+          git fetch --no-recurse-submodules origin "$TARGET_BRANCH"
           HAS_ERROR=0
 
           echo "Verificando se algum submódulo regrediu em relação à branch $TARGET_BRANCH..."
@@ -42,7 +42,8 @@ jobs:
                   echo "✅ $sub: Atualizado (mesmo commit)"
                   continue
               fi
-              git -C "$sub" fetch origin 2>/dev/null || true
+              git -C "$sub" fetch --unshallow origin "+refs/heads/*:refs/remotes/origin/*" 2>/dev/null || git -C "$sub" fetch origin "+refs/heads/*:refs/remotes/origin/*" 2>/dev/null || true
+              git -C "$sub" fetch origin "$base_commit" 2>/dev/null || true
               if git -C "$sub" merge-base --is-ancestor "$base_commit" "$pr_commit" 2>/dev/null; then
                   echo "✅ $sub: Atualizado (avanço da $TARGET_BRANCH)"
               else
