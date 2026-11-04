@@ -7,7 +7,7 @@ BUILD_TYPE=RelWithDebInfo
 # (MAKEFLAGS evita que o colcon injete -j16 automaticamente no cmake --build)
 export CMAKE_BUILD_PARALLEL_LEVEL=2
 export MAKEFLAGS="-j2"
-PARALLEL_WORKERS=2
+PARALLEL_WORKERS=4
 
 colcon build \
     --symlink-install \
