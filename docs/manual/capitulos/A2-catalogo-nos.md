@@ -43,6 +43,10 @@ As 29 folhas registradas em `strategy_node.cpp`. "Usos" é o número de ocorrên
 
 | Folha | Tipo | Portas | O que faz | Usos |
 |---|---|---|---|---|
+| `CheckGameState` | Cond | `phase` (string) | compara `phase` da blackboard raiz (`HALT`, `TIMEOUT`, `STOP`, `BALL_PLACEMENT`, `PREPARE_KICKOFF`, `KICKOFF`, `PREPARE_PENALTY`, `PENALTY`, `FREE_KICK`, `RUN`); FAILURE se ausente/inválida | 0 |
+| `WeAreFavored` | Cond | — | `we_favored == true` na blackboard raiz; FAILURE se ausente ou falso | 0 |
+| `IsDataFresh` | Cond | `max_gc_ms` (500), `max_pose_ms` (150), `max_ball_ms` (300), `require_gc` (opcional) | verifica `gc_age_ms`, `pose_age_ms` e `ball_age_ms` na blackboard raiz | 0 |
+| `HasRole` | Cond | `role` (string: `goalkeeper`, `attacker`, `defender`, `kicker`) | compara `role` da blackboard raiz; FAILURE se ausente/inválido | 0 |
 | `CheckGCCommand` | Cond | `expected` (int) | `gc_command == expected` | 31 |
 | `IsValueTrue` | Cond | `value` (bool) | FAILURE se ausente ou falso | 30 |
 | `IsThisNodeID` | Cond | `id` (uint) | o robô do processo é `id` | 30 |
@@ -128,4 +132,4 @@ Atual: `attacker_id`, `defender_id`. Proposta: acrescenta `goalkeeper_id`, `kick
 | `/robot_telemetry` | `RobotTelemetry` | rádio NRF24 | (ninguém na estratégia) |
 | `/game_state` *(proposto)* | `GameState` (TL) | `referee_state_node` | `strategy_node`, controlador |
 | `/robot_motion_limit` *(proposto)* | a definir | `SetMotionLimit` | SafetyGate |
-| `/strategy/active_branch` *(proposto)* | `std_msgs/String` | `strategy_node` | rosbag, depuração |
+| `/strategy/active_branch` | `std_msgs/String` (TL) | `strategy_node` (`robot_id=<id> branch=<novo> prev_branch=<ant> phase=<FASE> role=<papel> reason=<motivo>`) | rosbag, depuração |
