@@ -65,7 +65,10 @@ total_failures = 0
 
 xml_files = sorted(
     glob.glob("build/**/test_*.gtest.xml", recursive=True) +
-    glob.glob("build/**/pytest.xml", recursive=True)
+    glob.glob("build/**/pytest.xml", recursive=True) +
+    # T02: validador estático das BTs (pytest registrado no CMake do oxebots_strategy). O nome é
+    # específico para não contar os testes de lint (*.xunit.xml), que hoje não reprovam a suíte.
+    glob.glob("build/**/test_validate_bt.xunit.xml", recursive=True)
 )
 
 for f in xml_files:
