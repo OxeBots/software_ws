@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!-- PROPOSTA. S06. Regra §8.3.3 p.26: >= 0,5 m da linha bola->alvo. -->
+<root BTCPP_format="4">
+  <BehaviorTree ID="BallPlacementTheirTree">
+    <ReactiveSequence name="AvoidCorridor">
+      <SetMotionLimit limit_mps="0.75"/>
+      <ReactiveFallback>
+        <!-- Sai do corredor (estádio) quando necessário -->
+        <AvoidPlacementCorridor margin_mm="550.0"/>
+        <HoldPosition robot_id="{robot_id}"/>
+      </ReactiveFallback>
+    </ReactiveSequence>
+  </BehaviorTree>
+</root>

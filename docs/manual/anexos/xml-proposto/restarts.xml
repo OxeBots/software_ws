@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<!-- PROPOSTA (não executável): kickoff, pênalti, free kick. Sem coordenadas literais:
+     posições vêm de ComputeLegalSlot (independente de lado: own_goal_x/side_sign na blackboard). -->
+<root BTCPP_format="4">
+
+  <BehaviorTree ID="PrepareKickoffOurTree">
+    <ReactiveFallback name="Roles">
+      <ReactiveSequence><HasRole role="goalkeeper"/><SubTree ID="GoalkeeperTree" _autoremap="true"/></ReactiveSequence>
+      <ReactiveSequence>
+        <HasRole role="kicker"/>
+        <ComputeLegalSlot slot="kickoff_kicker" index="0" slot_x="{slot_x}" slot_y="{slot_y}" slot_w="{slot_w}"/>
+        <GoToPoint robot_id="{robot_id}" x="{slot_x}" y="{slot_y}" face_x="{ball_x}" face_y="{ball_y}" tolerance="50.0"/>
+      </ReactiveSequence>
+      <ReactiveSequence>
+        <ComputeLegalSlot slot="kickoff_def" index="0" slot_x="{slot_x}" slot_y="{slot_y}" slot_w="{slot_w}"/>
+        <GoToPoint robot_id="{robot_id}" x="{slot_x}" y="{slot_y}" face_x="{ball_x}" face_y="{ball_y}" tolerance="50.0"/>
+      </ReactiveSequence>
+    </ReactiveFallback>
+  </BehaviorTree>
+
+  <!-- Também usada como espera durante o KICKOFF adversário -->
+  <BehaviorTree ID="PrepareKickoffTheirTree">
+    <ReactiveFallback name="Roles">
+      <ReactiveSequence><HasRole role="goalkeeper"/><SubTree ID="GoalkeeperTree" _autoremap="true"/></ReactiveSequence>
+      <ReactiveSequence>
+        <ComputeLegalSlot slot="kickoff_def" index="0" slot_x="{slot_x}" slot_y="{slot_y}" slot_w="{slot_w}"/>
+        <GoToPoint robot_id="{robot_id}" x="{slot_x}" y="{slot_y}" face_x="{ball_x}" face_y="{ball_y}" tolerance="50.0"/>
+      </ReactiveSequence>
+    </ReactiveFallback>
+  </BehaviorTree>
+
+  <BehaviorTree ID="KickoffExecuteOurTree">
+    <ReactiveFallback name="Roles">
+      <ReactiveSequence><HasRole role="goalkeeper"/><SubTree ID="GoalkeeperTree" _autoremap="true"/></ReactiveSequence>
+      <ReactiveSequence>
+        <HasRole role="kicker"/>
+        <SubTree ID="RestartKickerTree" _autoremap="true" target_x="{opp_goal_x}" target_y="{opp_goal_y}"/>
+      </ReactiveSequence>
+      <HoldPosition robot_id="{robot_id}"/>
+    </ReactiveFallback>
+  </BehaviorTree>
+
+  <BehaviorTree ID="PreparePenaltyOurTree">
+    <ReactiveFallback name="Roles">
+      <ReactiveSequence><HasRole role="goalkeeper"/><SubTree ID="GoalkeeperTree" _autoremap="true"/></ReactiveSequence>
+      <ReactiveSequence>
+        <HasRole role="kicker"/>
+        <ComputeLegalSlot slot="penalty_kicker" index="0" slot_x="{slot_x}" slot_y="{slot_y}" slot_w="{slot_w}"/>
+        <GoToPoint robot_id="{robot_id}" x="{slot_x}" y="{slot_y}" face_x="{opp_goal_x}" face_y="{opp_goal_y}" tolerance="50.0"/>
+      </ReactiveSequence>
+      <ReactiveSequence>
+        <ComputeLegalSlot slot="penalty_behind" index="0" slot_x="{slot_x}" slot_y="{slot_y}" slot_w="{slot_w}"/>
+        <GoToPoint robot_id="{robot_id}" x="{slot_x}" y="{slot_y}" tolerance="50.0"/>
+      </ReactiveSequence>
+    </ReactiveFallback>
+  </BehaviorTree>
+
+  <BehaviorTree ID="PreparePenaltyTheirTree">
+    <ReactiveFallback name="Roles">
+      <ReactiveSequence><HasRole role="goalkeeper"/><PenaltyKeeperLine side="defend"/></ReactiveSequence>
+      <ReactiveSequence>
+        <ComputeLegalSlot slot="penalty_behind" index="0" slot_x="{slot_x}" slot_y="{slot_y}" slot_w="{slot_w}"/>
+        <GoToPoint robot_id="{robot_id}" x="{slot_x}" y="{slot_y}" tolerance="50.0"/>
+      </ReactiveSequence>
+    </ReactiveFallback>
+  </BehaviorTree>
+
+  <BehaviorTree ID="PenaltyExecuteOurTree">
+    <ReactiveFallback name="Roles">
+      <ReactiveSequence><HasRole role="goalkeeper"/><SubTree ID="GoalkeeperTree" _autoremap="true"/></ReactiveSequence>
+      <ReactiveSequence>
+        <HasRole role="kicker"/>
+        <SubTree ID="RestartKickerTree" _autoremap="true" target_x="{opp_goal_x}" target_y="{opp_goal_y}"/>
+      </ReactiveSequence>
+      <HoldPosition robot_id="{robot_id}"/>
+    </ReactiveFallback>
+  </BehaviorTree>
+
+  <BehaviorTree ID="PenaltyDefendTheirTree">
+    <ReactiveFallback name="Roles">
+      <ReactiveSequence>
+        <HasRole role="goalkeeper"/>
+        <!-- Linha de gol até a bola entrar em jogo; depois volta ao goleiro normal -->
+        <ReactiveFallback>
+          <ReactiveSequence><Inverter><WaitBallInPlay moved_mm="50.0" timeout_s="10.0"/></Inverter><PenaltyKeeperLine side="defend"/></ReactiveSequence>
+          <SubTree ID="GoalkeeperTree" _autoremap="true"/>
+        </ReactiveFallback>
+      </ReactiveSequence>
+      <HoldPosition robot_id="{robot_id}"/>
+    </ReactiveFallback>
+  </BehaviorTree>
+
+  <!-- Funde free_kick/corner_kick/throw_in/kick_in. designated_x/y vem do GameState. -->
+  <BehaviorTree ID="FreeKickOurTree">
+    <ReactiveFallback name="Roles">
+      <ReactiveSequence><HasRole role="goalkeeper"/><SubTree ID="GoalkeeperTree" _autoremap="true"/></ReactiveSequence>
+      <ReactiveSequence>
+        <HasRole role="kicker"/>
+        <SubTree ID="RestartKickerTree" _autoremap="true" target_x="{opp_goal_x}" target_y="{opp_goal_y}"/>
+      </ReactiveSequence>
+      <ReactiveSequence>
+        <ComputeLegalSlot slot="freekick_support" index="0" slot_x="{slot_x}" slot_y="{slot_y}" slot_w="{slot_w}"/>
+        <GoToPoint robot_id="{robot_id}" x="{slot_x}" y="{slot_y}" face_x="{ball_x}" face_y="{ball_y}" tolerance="80.0"/>
+      </ReactiveSequence>
+    </ReactiveFallback>
+  </BehaviorTree>
+
+  <BehaviorTree ID="FreeKickTheirTree">
+    <ReactiveFallback name="Roles">
+      <ReactiveSequence><HasRole role="goalkeeper"/><SubTree ID="GoalkeeperTree" _autoremap="true"/></ReactiveSequence>
+      <ReactiveSequence>
+        <ComputeLegalSlot slot="wall" index="0" slot_x="{slot_x}" slot_y="{slot_y}" slot_w="{slot_w}"/>
+        <GoToPoint robot_id="{robot_id}" x="{slot_x}" y="{slot_y}" face_x="{ball_x}" face_y="{ball_y}" tolerance="80.0"/>
+      </ReactiveSequence>
+    </ReactiveFallback>
+  </BehaviorTree>
+
+</root>

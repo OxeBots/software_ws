@@ -18,12 +18,17 @@ for arg in "$@"; do
     fi
 done
 
+# Limita a compilação para 2 pacotes simultâneos e no máximo 2 jobs por pacote
+# (MAKEFLAGS evita que o colcon injete -j16 automaticamente no cmake --build)
+export CMAKE_BUILD_PARALLEL_LEVEL=2
+export MAKEFLAGS="-j2"
+PARALLEL_WORKERS=4
+
 colcon build \
-    --base-paths src \
-    --merge-install \
     --symlink-install \
-    $EXTRA_COLCON_ARGS \
-    --cmake-args "-DCMAKE_BUILD_TYPE=${BUILD_TYPE}" "-DCMAKE_EXPORT_COMPILE_COMMANDS=On"
+    --parallel-workers ${PARALLEL_WORKERS} \
+    --cmake-args "-DCMAKE_BUILD_TYPE=${BUILD_TYPE}" "-DCMAKE_EXPORT_COMPILE_COMMANDS=On" \
+    "$@"
 
 BUILD_RESULT=$?
 
@@ -32,5 +37,7 @@ if [ $BUILD_RESULT -eq 0 ]; then
 else
     echo "Build falhou"
 fi
+
+source install/setup.bash
 
 exit $BUILD_RESULT

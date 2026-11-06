@@ -19,7 +19,7 @@ RUN if id -u $USER_UID ; then userdel `id -un $USER_UID` ; fi
 RUN groupadd --gid $USER_GID $USERNAME \
     && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
     && apt-get update \
-    && apt-get install -y sudo python3-serial python3-pip \
+    && apt-get install -y sudo python3-serial python3-pip python3-matplotlib python3-tk \
        libserialport-dev libboost-system-dev libboost-thread-dev pkg-config \
     && pip3 install bitproto --break-system-packages \
     && pip3 install bitprotolib --break-system-packages \

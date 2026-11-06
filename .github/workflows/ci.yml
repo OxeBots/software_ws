@@ -1,0 +1,84 @@
+name: OxeBots CI - Build and Test
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: ['**']
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    container:
+      image: osrf/ros:jazzy-desktop-full
+
+    steps:
+      - name: Configure Git safe directory
+        run: git config --global --add safe.directory '*'
+
+      - name: Checkout repository and submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Verify submodule pointers against target branch
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          TARGET_BRANCH="${{ github.base_ref }}"
+          git fetch --no-recurse-submodules origin "$TARGET_BRANCH"
+          HAS_ERROR=0
+
+          echo "Verificando se algum submódulo regrediu em relação à branch $TARGET_BRANCH..."
+
+          for sub in $(git config --file .gitmodules --get-regexp path | awk '{print $2}'); do
+              base_commit=$(git ls-tree origin/"$TARGET_BRANCH" "$sub" 2>/dev/null | awk '{print $3}')
+              if [ -z "$base_commit" ]; then
+                  echo "ℹ️  Submódulo novo: $sub"
+                  continue
+              fi
+              pr_commit=$(git rev-parse HEAD:"$sub")
+              if [ "$base_commit" = "$pr_commit" ]; then
+                  echo "✅ $sub: Atualizado (mesmo commit)"
+                  continue
+              fi
+              git -C "$sub" fetch --unshallow origin "+refs/heads/*:refs/remotes/origin/*" 2>/dev/null || git -C "$sub" fetch origin "+refs/heads/*:refs/remotes/origin/*" 2>/dev/null || true
+              git -C "$sub" fetch origin "$base_commit" 2>/dev/null || true
+              if git -C "$sub" merge-base --is-ancestor "$base_commit" "$pr_commit" 2>/dev/null; then
+                  echo "✅ $sub: Atualizado (avanço da $TARGET_BRANCH)"
+              else
+                  echo "❌ [ERRO] O submódulo '$sub' está defasado em relação à branch '$TARGET_BRANCH'!"
+                  echo "   Commit na base ($TARGET_BRANCH): $base_commit"
+                  echo "   Commit no PR:                $pr_commit"
+                  echo "   -> Execute 'git -C $sub merge origin/$TARGET_BRANCH' para sincronizar."
+                  HAS_ERROR=1
+              fi
+          done
+
+          if [ $HAS_ERROR -ne 0 ]; then
+              echo "❌ Falha na verificação de submódulos: regressões de ponteiro detectadas."
+              exit 1
+          fi
+          echo "✅ Todos os submódulos estão sincronizados com a branch $TARGET_BRANCH!"
+
+      - name: Install system dependencies with rosdep
+        shell: bash
+        run: |
+          source /opt/ros/jazzy/setup.bash
+          apt-get update
+          rosdep update
+          rosdep install --from-paths src --ignore-src -y --rosdistro jazzy
+
+      - name: Build workspace
+        shell: bash
+        run: |
+          source /opt/ros/jazzy/setup.bash
+          export MAKEFLAGS="-j2"
+          export CMAKE_BUILD_PARALLEL_LEVEL=2
+          colcon build --symlink-install --parallel-workers 2 --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo
+
+      - name: Run unit test suite
+        shell: bash
+        run: |
+          source /opt/ros/jazzy/setup.bash
+          ./test.sh

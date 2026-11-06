@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!-- PROPOSTA. Substitui behavior_trees/stop.xml (ID mantido: StopSubTree). Corrige o problema do STOP descrito no Capítulo 13. -->
+<root BTCPP_format="4">
+  <BehaviorTree ID="StopSubTree">
+    <ReactiveSequence name="StopLogic">
+      <!-- Regra §5.1.1: < 0,75 m/s (SafetyGate aplica o teto no controlador) -->
+      <SetMotionLimit limit_mps="0.75"/>
+      <ReactiveFallback name="StopAction">
+        <!-- Perto da bola (< 0,5 m + margem): recua para ponto legal -->
+        <ReactiveSequence name="RetreatIfClose">
+          <IsBallClose robot_id="{robot_id}" distance_threshold="650.0"/>
+          <ComputeLegalSlot slot="retreat" index="0" slot_x="{slot_x}" slot_y="{slot_y}" slot_w="{slot_w}"/>
+          <GoToPoint robot_id="{robot_id}" x="{slot_x}" y="{slot_y}"
+                     face_x="{ball_x}" face_y="{ball_y}" tolerance="80.0"/>
+        </ReactiveSequence>
+        <!-- Caso contrário fica parado (publica goal na pose atual) -->
+        <HoldPosition robot_id="{robot_id}"/>
+      </ReactiveFallback>
+    </ReactiveSequence>
+  </BehaviorTree>
+</root>
