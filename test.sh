@@ -68,7 +68,9 @@ xml_files = sorted(
     glob.glob("build/**/pytest.xml", recursive=True) +
     # T02: validador estático das BTs (pytest registrado no CMake do oxebots_strategy). O nome é
     # específico para não contar os testes de lint (*.xunit.xml), que hoje não reprovam a suíte.
-    glob.glob("build/**/test_validate_bt.xunit.xml", recursive=True)
+    glob.glob("build/**/test_validate_bt.xunit.xml", recursive=True) +
+    # E09/E10: política estática das árvores de produção (test_trees_policy.py).
+    glob.glob("build/**/test_trees_policy.xunit.xml", recursive=True)
 )
 
 for f in xml_files:
