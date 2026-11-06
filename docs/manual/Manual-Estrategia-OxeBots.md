@@ -1321,10 +1321,10 @@ A árvore do defensor, `defender_tree.xml`, é pequena e declarativa (Figura 10.
 
 *Figura 10.1 — A árvore do defensor*
 
-1. **Bola no campo adversário** (`IsBallInOpponentField`): o defensor faz `ShadowBall` — acompanha a bola prevista a uma distância fixa, **atrás** dela, no rumo do próprio gol, sem nunca cruzar o meio-campo (distância padrão de 1200 mm).
+1. **Bola no campo adversário** (`IsBallInOpponentField`): o defensor faz `ShadowBall` — fica na **linha entre a bola prevista e o centro do próprio gol**, a um raio fora da área de defesa (cobre o ângulo do gol, como o goleiro), sem nunca cruzar o meio-campo.
 2. **Bola no nosso campo**: subdivide-se em
    - **o adversário tem a posse** (`IsOpponentControllingBall`): `MarkOpponent` — posiciona-se na linha entre a bola e o gol, a 400 mm da bola, bloqueando o chute;
-   - **caso contrário**: volta a fazer `ShadowBall`, agora com distância de 1000 mm, para cobrir o goleiro em vez de brigar pela bola.
+   - **caso contrário**: volta a fazer `ShadowBall`, agora com `ratio` 0,35 (raio menor, mais perto do gol), para cobrir o goleiro em vez de brigar pela bola.
 
 Note a escolha de projeto: o defensor **não disputa a bola**. Quem faz isso é o atacante. O defensor é uma "sombra" que ocupa a posição defensiva correta.
 
@@ -1333,9 +1333,10 @@ Note a escolha de projeto: o defensor **não disputa a bola**. Quem faz isso é 
 `ShadowBall` é uma ação síncrona que, a cada tick, calcula um alvo e o publica como `RobotGoal`. O cálculo (Figura 10.2, painel a):
 
 1. **Bola prevista**: posição atual somada à velocidade × `predict_time` (0,3 s).
-2. **Alvo em x**: a posição prevista deslocada de `follow_distance` **na direção do próprio gol**. Esse valor é então limitado entre a linha do meio-campo (−180 mm, do nosso lado) e a **borda da área de defesa mais 200 mm**, de modo que o defensor nunca entre na área.
-3. **Alvo em y**: o y previsto da bola, limitado a ±`y_limit` (900 mm).
-4. **Orientação**: o robô olha para a bola.
+2. **Raio**: seja `d` a distância da bola prevista ao centro do gol. O defensor fica a um raio `R = ratio × d` do centro do gol, sobre a reta gol→bola (`ratio` padrão 0,5). `R` nunca é menor que a saída da área de defesa na direção da bola (borda da área + 200 mm de margem do robô) mais `standoff` (300 mm), nem maior que `max_radius` (2500 mm), e é reduzido se o alvo passasse do meio-campo (−180 mm).
+3. **Alvo**: `gol + R · u`, onde `u` é o vetor unitário gol→bola. Quanto mais a bola vai para um lado, mais o defensor se desloca para o mesmo lado, mas seguindo o **ângulo** e não o y da bola. O |y| é limitado à meia-largura do campo menos 300 mm e nunca fica menor que a meia-largura da área mais a margem.
+4. **Bola colada à área**: se o alvo cairia a menos de 350 mm da bola (entre ela e o gol não cabe o defensor), o ângulo é reduzido em até 34°, em direção ao eixo do gol, **pelo mesmo lado da bola e sem cruzar o eixo**, para não ficar no caminho do atacante. O deslocamento cresce de forma contínua com a proximidade.
+5. **Orientação**: o robô olha para a bola.
 
 ### 10.1.2 MarkOpponent
 
@@ -3052,10 +3053,10 @@ As 29 folhas registradas em `strategy_node.cpp`. "Usos" é o número de ocorrên
 
 | Folha | Tipo | Portas de entrada | Retornos | Usos |
 |---|---|---|---|---|
-| `IsBallInOpponentField` | Cond | `ball_x`, `is_yellow` | SUCCESS/FAILURE | 1 |
+| `IsBallInOpponentField` | Cond | `ball_x`, `my_goal_x` (padrão `{my_goal_x}`), `is_yellow` (opcional, legado) | SUCCESS/FAILURE | 1 |
 | `IsOpponentControllingBall` | Cond | `opponent_controlling` | SUCCESS/FAILURE | 1 |
-| `ShadowBall` | Sync | `ball` (Pose2D), `ball_vel` (Vector2D), `my_goal_x`, `follow_distance` (1200), `predict_time` (0,3), `penalty_area_depth`, `y_limit` (900) | SUCCESS (publica o alvo) | 2 |
-| `MarkOpponent` | Sync | `ball`, `my_goal_x`, `block_distance` (400), `penalty_area_depth`, `y_limit` (1200) | SUCCESS | 1 |
+| `ShadowBall` | Sync | `ball` (Pose2D), `ball_vel` (Vector2D), `my_goal_x`, `ratio` (0,5), `standoff` (300), `max_radius` (2500), `predict_time` (0,3), `penalty_area_depth`, `penalty_area_width` | SUCCESS (publica o alvo) | 2 |
+| `MarkOpponent` | Sync | `ball`, `my_goal_x`, `block_distance` (400), `penalty_area_depth`, `penalty_area_width`, `y_limit` (1200) | SUCCESS | 1 |
 | `GoToClamped` | SA | `x`, `y`, `my_goal_x`, `penalty_area_depth` | sempre RUNNING | 0 |
 | `GoalLineDefend` | SA | `robot_id`, `ball_y` | RUNNING | 0 |
 | `LateralClear` | SA | `robot_id`, `ball_x`, `ball_y` | RUNNING; SUCCESS ao concluir | 0 |
