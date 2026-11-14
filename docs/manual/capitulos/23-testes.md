@@ -33,9 +33,9 @@ Boa parte da segurança do projeto depende de **semânticas** da BehaviorTree.CP
 
 O teste `test_master_tree` (gtest, sem ROS ativo) carrega a `MainTreeEL` **real** e todas as subárvores de `behavior_trees/`, mas com **folhas falsas** e uma blackboard controlada pelo teste. As condições de guarda (`CheckGameState`, `WeAreFavored`, `IsDataFresh`, `HasRole`, `IsCornerKick`, `IsThrowIn`) são as reais, porque são elas que escolhem o ramo. As folhas falsas têm o mesmo manifesto (portas) das reais, então uma folha nova entra no teste sozinha, e registram quantos `tick`, `onStart` e `halt` receberam.
 
-O que ele verifica: o ramo da raiz que decide em cada fase (os 12 ramos, 0 a 11, incluindo fase inválida e ausente); o que roda dentro de cada ramo por papel, para amarelo e azul e para os dois lados do campo; e a **preempção** (a folha interrompida recebe exatamente um `halt` no mesmo tick). Cobre no nível da árvore os cenários SC-01 a SC-11, SC-13, SC-14, SC-16 e SC-17.
+O que ele verifica: o ramo da raiz que decide em cada fase (os 12 ramos, 0 a 11, incluindo fase inválida e ausente); o que roda dentro de cada ramo por papel, para amarelo e azul e para os dois lados do campo; e a **preempção** (a folha interrompida recebe exatamente um `halt` no mesmo tick). Cobre no nível da árvore os cenários SC-01 a SC-11, SC-13 a SC-17 e SC-23 a SC-25.
 
-Os ramos ainda provisórios (`RunBranch` e o ball placement nosso) estão **fixados como "para com segurança"**. Quando A06 e E04 trocarem o XML, esses testes falham de propósito e devem ser trocados pelos testes do comportamento real (SC-12, SC-15). O pênalti (E06) já é real e tem testes de SC-09 e SC-10.
+O ramo ainda provisório (o ball placement nosso, E04) está **fixado como "para com segurança"**. Quando o E04 trocar o XML, esse teste falha de propósito e deve ser trocado pelo teste do comportamento real (SC-12). O pênalti (E06) e o jogo corrido (A06, `NormalPlayTree` em `RunBranch`) já são reais e têm seus testes em `test_master_tree.cpp`.
 
 A blackboard do teste (`master_tree_scenario.hpp`) usa os mesmos nomes e tipos que o `refresh()` do `strategy_node` escreve, e o teste `MasterTreeScenarioMatchesRefreshKeysAndTypes` (em `test_strategy_node.cpp`) falha se os dois divergirem.
 
