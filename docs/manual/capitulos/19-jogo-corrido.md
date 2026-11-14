@@ -70,5 +70,13 @@ O número de robôs em campo **muda** durante a partida: cartões amarelos e ver
 
 A lista de robôs ativos (`active_ids`) é calculada pelo atribuidor de papéis a partir de três fontes: o que a visão vê (com a idade dos dados), o `max_allowed_bots` do árbitro e, no futuro, as flags de erro da telemetria dos robôs. Quando o `max_allowed_bots` fica abaixo do número de robôs ativos, o atribuidor indica **qual** robô deve ser retirado e o mantém parado; a retirada física é feita por um humano da equipe (um dos poucos momentos em que o regulamento permite).
 
+### Como a degradação está implementada (P03)
+
+- **Cartão amarelo ou vermelho.** O `role_assigner_node` lê `max_allowed_bots` do `GameState` (copiado do `TeamInfo`). Quando há mais robôs em campo que o limite, ele **retira** os de pior custo: o robô retirado sai de `active_ids` e de todos os papéis, e o `strategy_node` o vê como `idle` (parado). O **goleiro nunca é retirado**. A escolha é pegajosa: o robô retirado continua sendo o primeiro a sair, para a retirada não trocar de robô enquanto o humano o tira do campo. Quando ele some da visão, o limite passa a ser cumprido e ninguém mais é retirado. O log mostra `RETIRAR o robô N do campo`. O valor 0 em `max_allowed_bots` significa "o GC não informou" e não retira ninguém.
+- **Robô perdido.** O `game_observer_node` expira o robô não visto por 500 ms (`robot_expiration_ms`); ele sai de `allies`, e o atribuidor refaz os papéis no mesmo ciclo (o atacante perdido dá lugar ao outro robô de linha, e `epoch` sobe). Quando o robô volta à visão, os papéis voltam a ser exclusivos.
+- **Goleiro e atacante apenas.** Sem defensor atribuído, a blackboard traz `has_defender = false`. Na `AttackerTree`, o ramo `CoverGoalWhenAlone` faz o atacante cobrir o gol, como o defensor faria (`MarkOpponent` com o adversário na posse, senão `ShadowBall`), enquanto a bola está no nosso campo. Com a bola no campo adversário ele ataca normalmente.
+- **Sem goleiro.** Se o goleiro do GC não está em campo, os dois robôs de linha são atacante e defensor, e o defensor não entra na própria área (R-22).
+- **Limite conhecido:** o robô retirado (papel `idle`) fica parado em jogo corrido, mas nas árvores de reinício o papel `idle` cai no ramo de posicionamento legal e se move para um slot legal até o humano o tirar.
+
 !!! note "Quando um robô é substituído"
     A substituição de robôs, em si (o *robot handler* entra no campo, retira ou coloca robôs) está fora do software. O que o software faz é **reagir**: o atribuidor atualiza `active_ids` e a árvore vê o papel mudar no tick seguinte.

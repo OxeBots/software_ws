@@ -48,7 +48,7 @@ A {{fig:fluxo_dados}} mostra, em ordem, o que acontece com a informação desde 
 3. **Tudo → `strategy_node`.** A árvore de cada robô lê o estado do jogo, as predições e o comando do árbitro (que ela assina diretamente do Game Controller) e decide.
 4. **`/robot_goal`.** As folhas de movimento publicam um alvo. Só republicam quando o alvo muda de forma relevante (mais de 2 mm ou cerca de 1° de orientação).
 5. **D\*.** O planejador, a 10 Hz (40 Hz quando a bola está a menos de 40 cm do robô), calcula uma rota e a publica como `nav_msgs/Path`.
-6. **Path follower.** A cada 50 ms (20 Hz), o controlador segue a rota, aplica controle proporcional, repulsão de contato e travas de área, e publica `/robot_commands`.
+6. **Path follower.** A cada 20 ms (50 Hz), o controlador segue a rota, aplica controle proporcional, repulsão de contato e travas de área, e publica `/robot_commands`.
 7. **Driver.** O driver de comunicação entrega o comando ao simulador ou ao rádio.
 
 Além desse caminho principal existe um **canal de exceção**: as folhas que precisam de uma ação física especial (parar, chutar, girar) enviam um `RobotMotionOverride` direto ao controlador, que o executa em lugar de seguir a rota. O Capítulo 7 detalha esse mecanismo.
