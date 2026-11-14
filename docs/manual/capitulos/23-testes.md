@@ -29,6 +29,20 @@ O custo-benefício mais alto está na base. Um script de ~100 linhas que carregu
 
 Boa parte da segurança do projeto depende de **semânticas** da BehaviorTree.CPP: que `ReactiveSequence` halta os filhos seguintes, que `RetryUntilSuccessful(-1)` com filho síncrono faz uma tentativa por tick, que `Parallel` interrompe os filhos ao decidir, que `getInput` falha com porta sem valor. Como parte dessas semânticas foi confirmada na série 4.6 e a instalada é a 4.10, um conjunto de pequenos testes ("harness") que reproduza cada caso das figuras do Capítulo 4 **na versão do container** elimina a dúvida e protege contra mudanças em atualizações.
 
+## Testes da Master Tree (T05)
+
+O teste `test_master_tree` (gtest, sem ROS ativo) carrega a `MainTreeEL` **real** e todas as subárvores de `behavior_trees/`, mas com **folhas falsas** e uma blackboard controlada pelo teste. As condições de guarda (`CheckGameState`, `WeAreFavored`, `IsDataFresh`, `HasRole`, `IsCornerKick`, `IsThrowIn`) são as reais, porque são elas que escolhem o ramo. As folhas falsas têm o mesmo manifesto (portas) das reais, então uma folha nova entra no teste sozinha, e registram quantos `tick`, `onStart` e `halt` receberam.
+
+O que ele verifica: o ramo da raiz que decide em cada fase (os 12 ramos, 0 a 11, incluindo fase inválida e ausente); o que roda dentro de cada ramo por papel, para amarelo e azul e para os dois lados do campo; e a **preempção** (a folha interrompida recebe exatamente um `halt` no mesmo tick). Cobre no nível da árvore os cenários SC-01 a SC-11, SC-13, SC-14, SC-16 e SC-17.
+
+Os ramos ainda provisórios (`RunBranch` e o ball placement nosso) estão **fixados como "para com segurança"**. Quando A06 e E04 trocarem o XML, esses testes falham de propósito e devem ser trocados pelos testes do comportamento real (SC-12, SC-15). O pênalti (E06) já é real e tem testes de SC-09 e SC-10.
+
+A blackboard do teste (`master_tree_scenario.hpp`) usa os mesmos nomes e tipos que o `refresh()` do `strategy_node` escreve, e o teste `MasterTreeScenarioMatchesRefreshKeysAndTypes` (em `test_strategy_node.cpp`) falha se os dois divergirem.
+
+## Teste de integração do HALT (T06)
+
+O teste `test_halt_preempt` (`launch_testing`) sobe processos reais (`referee_state_node`, `movement_calculation_node` e `strategy_node`) e faz o papel de árbitro, visão e planejador. Com um robô andando a cerca de 1 m/s, publica `HALT` e mede, em `/robot_commands`, o tempo até o comando ficar zero **e continuar zero** (SC-02, critério global 1). São dois caminhos: um robô **sem árvore** (só o SafetyGate, que tem de parar mesmo com o `strategy_node` ausente e mesmo recebendo `RobotGoal` novos) e um robô **com árvore** (`test_halt_preempt.xml`, uma cópia do `SafetyGuard` e do `HaltBranch` da `MainTreeEL` com um `RunBranch` que anda), que confere também `/strategy/active_branch` e o `MODE_HALT`. Cada caminho repete 10 ciclos RUN → HALT. O limite é 300 ms e pode ser mudado por `OXEBOTS_HALT_BUDGET_MS`.
+
 ## Cenários de conformidade
 
 Cada cenário descreve uma situação de jogo, a entrada, o ramo esperado e o que se mede:
