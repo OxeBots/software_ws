@@ -45,6 +45,7 @@ A blackboard atual é escrita por callbacks em outra *thread*, o que dá valores
 | `own_goal_x`, `opp_goal_x`, `opp_goal_y`, `side_sign` | double, double, double, int | idem + geometria | quase todas | por geometria |
 | `field_*`, `penalty_area_*`, `goal_width`, `center_circle_radius` | double (mm) | geometria | folhas de posição | por geometria |
 | `role`, `kicker_id`, `role_epoch`, `active_ids` | enum, uint, uint, vetor | `refresh()` (de `/role_assignment`) | `HasRole` | por época |
+| `has_defender` | bool | `refresh()` (de `/role_assignment`): `defender_id != NO_ROBOT` | `AttackerTree` (atacante cobre o gol se não há defensor, P03) | por época |
 | `robot_pose` | `Pose2D` | `refresh()` (de `/game_data`) | movimento | `pose_age_ms` |
 | `ball`, `ball_vel` | `Pose2D`, `Vector2D` | `refresh()` (de `/game_data` e do Kalman) | defesa, ataque | `ball_age_ms` |
 | `gc_age_ms`, `pose_age_ms`, `ball_age_ms` | double | `refresh()` | `IsDataFresh` | — |

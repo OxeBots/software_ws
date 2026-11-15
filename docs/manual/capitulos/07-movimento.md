@@ -83,7 +83,7 @@ Quando `planner="straight_line"`, o planejador **ignora a grade** e interpola po
 
 ## O controlador de movimento
 
-O `movement_calculation_node` (por robô, no processo `path_follower_node_<i>`) é o **único** escritor autorizado do tópico `/robot_commands`. A cada 50 ms ele decide o que o robô faz, em ordem de prioridade (veja a {{fig:override_modos}}):
+O `movement_calculation_node` (por robô, no processo `path_follower_node_<i>`) é o **único** escritor autorizado do tópico `/robot_commands`. A cada 20 ms (50 Hz) ele decide o que o robô faz, em ordem de prioridade (veja a {{fig:override_modos}}):
 
 1. **HALT**: velocidades zero.
 2. **KICK**: executa a máquina de chute.
