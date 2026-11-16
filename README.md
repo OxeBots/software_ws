@@ -84,7 +84,7 @@ bash build.sh
 Ou manualmente com `colcon`:
 ```bash
 source /opt/ros/jazzy/setup.bash
-MAKEFLAGS="-j2" CMAKE_BUILD_PARALLEL_LEVEL=2 colcon build --symlink-install --parallel-workers 2
+MAKEFLAGS="-j2" CMAKE_BUILD_PARALLEL_LEVEL=2 colcon build --symlink-install --parallel-workers 4
 ```
 
 Para carregar o ambiente após a compilação:
@@ -98,20 +98,39 @@ source install/setup.bash
 
 ### 5.1 Execução Completa via Launch
 
-Para iniciar a pilha com a ponte de simulação grSim:
+Para iniciar a pilha com a ponte de simulação grSim (padrão):
 ```bash
-ros2 launch oxebots_bringup ssl-new.launch.py is_yellow_team:=false invert_sides:=false
+ros2 launch oxebots_bringup ssl-new.launch.py
 ```
 
-Parâmetros comuns de inicialização:
-- `is_yellow_team`: `true` se o time for o Amarelo; `false` se for Azul.
-- `invert_sides`: `true` se o time estiver defendendo o gol invertido.
-- `simulator_ip`: IP da máquina onde o grSim/simulador está rodando (padrão: `127.0.0.1`).
+Para selecionar a cor do time ou o modo de execução:
+```bash
+# Time Azul ou Amarelo no grSim
+ros2 launch oxebots_bringup ssl-new.launch.py team_color:=blue
+ros2 launch oxebots_bringup ssl-new.launch.py team_color:=yellow
 
-### 5.2 Scripts de Auxílio de Partida
+# Simulador ER-Force / Ra (inverte lados por padrão)
+ros2 launch oxebots_bringup ssl-new.launch.py mode:=ra
 
-- `./run_match.sh`: Inicia a partida e nós principais de forma orquestrada.
-- `./test_system.sh`: Executa testes automatizados do workspace.
+# Jogo real com rádio NRF24
+ros2 launch oxebots_bringup ssl-new.launch.py mode:=game
+```
+
+Argumentos principais do `ssl-new.launch.py`:
+- `mode`: `grsim` (padrão), `ra` (ER-Force/Ra) ou `game` (rádio NRF24).
+- `command_mode`: `velocity` (padrão) ou `point` (setpoints de trajetória no rádio).
+- `team_color`: `blue` ou `yellow` (atalho para carregar `match_config_blue.yaml` ou `match_config_yellow.yaml`).
+- `config_file`: caminho para um arquivo `.yaml` específico (padrão: `match_config.yaml`).
+- `invert_sides`: `True` ou `False` (espelha coordenadas; por padrão `True` apenas em `mode:=ra`).
+- `bt_xml`: nome do arquivo XML da Behavior Tree (padrão do YAML: `master_strategy_carry.xml`).
+- `require_gc`: `True` ou `False` (sobrescreve a exigência de Game Controller ativo na estratégia e no `referee_state_node`).
+- `use_rviz`: `True` (padrão) ou `False`.
+- `match`: `True` ou `False` (sobe Azul em `ROS_DOMAIN_ID=0` e Amarelo em `ROS_DOMAIN_ID=1`).
+
+### 5.2 Scripts de Auxílio
+
+- `./run_match.sh`: Inicia uma partida simulada completa (Time Azul vs. Time Amarelo) redirecionando para o Dev Container se necessário.
+- `./test.sh`: Executa a suíte de testes unitários e validadores estáticos do workspace e exibe o relatório consolidado.
 
 ---
 
@@ -121,16 +140,23 @@ O sistema conecta-se a softwares padrão da RoboCup SSL e dispositivos físicos:
 
 | Protocolo | Porta Padrão | Destino / Origem | Finalidade |
 | :--- | :--- | :--- | :--- |
-| UDP Multicast | `10006` (`224.5.23.2`) | SSL-Vision | Recepção de pacotes de rastreamento das câmeras de campo. |
+| UDP Multicast | `10020` (sim) / `10006` (real) (`224.5.23.2`) | SSL-Vision | Recepção de pacotes de rastreamento e geometria das câmeras de campo. |
 | UDP Multicast | `10003` (`224.5.23.1`) | Game Controller | Recepção de comandos do árbitro oficial da partida. |
-| UDP Unicast | `10301` / `10302` | grSim / SSL-RA | Envio de comandos de velocidade e chute (Azul: 10301, Amarelo: 10302). |
+| TCP | `10008` | Game Controller (`team_client_node`) | Conexão do cliente da equipe ao servidor do Game Controller. |
+| UDP Unicast | `10301` / `10302` | grSim / SSL-RA | Envio de comandos de velocidade e chute (Azul: `10301`, Amarelo: `10302`). |
+| TCP / ZMQ | `1667 + id` / `1677 + id` | Groot2 (`strategy_node`) | Inspeção em tempo real da Behavior Tree por robô (Azul: `1667+id`, Amarelo: `1677+id`). |
 | Serial USB | `/dev/ttyUSB0` (ou `/dev/ttyACM0`) | Base NRF24 | Transmissão de rádio com pacotes compactos Bitproto para robôs físicos. |
 
 ---
 
 ## 7. Testes e Validação
 
-Para rodar os testes unitários do workspace:
+Para rodar a suíte de testes unitários e validação estática das árvores:
+```bash
+./test.sh
+```
+
+Ou manualmente via `colcon`:
 ```bash
 colcon test --parallel-workers 2
 colcon test-result --all
