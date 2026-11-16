@@ -2,8 +2,41 @@
 # ==============================================================================
 # SSL Robot Placement Technical Challenge - Cenário 4 (Penalty)
 # Permissão de execução: chmod +x run_placement_4.sh
+# Uso:
+#   ./challengs/run_placement_4.sh                  # Simulação (grSim)
+#   ./challengs/run_placement_4.sh --real           # Jogo Real via Rádio (mode:=game)
+#   ./challengs/run_placement_4.sh --ra             # Simulador ER-Force/Ra (mode:=ra)
+#   ./challengs/run_placement_4.sh mode:=game ...   # Argumentos diretos do launch
 # ==============================================================================
 set -eo pipefail
+
+MODE="grsim"
+LAUNCH_ARGS=()
+for arg in "$@"; do
+    case "$arg" in
+        --real|--game|-r)
+            MODE="game"
+            LAUNCH_ARGS+=("mode:=game")
+            ;;
+        --ra)
+            MODE="ra"
+            LAUNCH_ARGS+=("mode:=ra")
+            ;;
+        mode:=*)
+            MODE="${arg#mode:=}"
+            LAUNCH_ARGS+=("$arg")
+            ;;
+        -h|--help)
+            echo "Uso: $0 [--real|--game|-r] [--ra] [argumentos_ros2_launch...]"
+            echo "  --real, --game, -r  Executa com robôs reais via rádio NRF24 (mode:=game)"
+            echo "  --ra                Executa no simulador ER-Force/Ra (mode:=ra)"
+            exit 0
+            ;;
+        *)
+            LAUNCH_ARGS+=("$arg")
+            ;;
+    esac
+done
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 if [ -f "${SCRIPT_DIR}/../install/setup.bash" ] || [ -d "${SCRIPT_DIR}/../src" ]; then
@@ -28,8 +61,8 @@ else
     echo "[AVISO] Arquivo install/setup.bash não encontrado. Certifique-se de que o workspace foi compilado." >&2
 fi
 
-# 3. Posiciona a bola e os robôs nas posições iniciais (Start) do PDF no simulador
-if [ -f "${SCRIPT_DIR}/set_placement_positions.py" ]; then
+# 3. Posiciona a bola e os robôs nas posições iniciais (Start) do PDF no simulador (apenas fora do modo real)
+if [ "${MODE}" != "game" ] && [ -f "${SCRIPT_DIR}/set_placement_positions.py" ]; then
     python3 "${SCRIPT_DIR}/set_placement_positions.py" 4 || true
 fi
 
@@ -43,9 +76,10 @@ echo "=========================================================="
 echo " SSL Robot Placement Technical Challenge - Cenário 4"
 echo "  - Árvore: placement_challenge_4.xml"
 echo "  - Time: yellow"
+echo "  - Modo: ${MODE}"
 echo "  - Comando de Início (GC): Prepare Penalty Yellow (6)"
 echo "=========================================================="
 
 exec ros2 launch oxebots_bringup ssl-new.launch.py \
     bt_xml:=placement_challenge_4.xml \
-    team_color:=yellow "$@"
+    team_color:=yellow "${LAUNCH_ARGS[@]}"
