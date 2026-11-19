@@ -82,7 +82,7 @@ O SafetyGate é um estágio no final do `movement_calculation_node`, **depois** 
 Ele aplica quatro regras, todas independentes da árvore:
 
 1. **HALT zera a velocidade.** Se o `GameState` indica `HALT` (ou `TIMEOUT`), o comando é zero, mesmo que um override ou uma rota digam o contrário.
-2. **Teto de velocidade por fase.** O módulo do vetor (vx, vy) é limitado a `speed_limit_mps` do `GameState`: 0,75 m/s nos estados de parada, 1,5 m/s no jogo. É este mecanismo que supre a lacuna do limite de STOP.
+2. **Teto de velocidade por fase.** O módulo do vetor (vx, vy) é limitado ao menor valor entre `max_linear_speed` do controlador (1,0 m/s por padrão, conservador frente ao teto regulamentar de 1,5 m/s de R-24), `speed_limit_mps` do `GameState` (0,75 m/s nos estados de parada) e o override de `/robot_motion_limit`. É este mecanismo que supre a lacuna do limite de STOP.
 3. ***Watchdog***. Se o controlador não recebe um objetivo ou um override há mais de 500 ms, zera os comandos e informa `MODE_HALT` no status. Ao contrário do comportamento atual (continuar na última rota), uma árvore silenciosa **pára o robô**.
 4. **Limite do chute.** `kick_speed` é limitado a 3,0 m/s para qualquer origem, inclusive folhas legadas que esqueçam de limitar.
 

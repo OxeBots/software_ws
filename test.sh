@@ -35,6 +35,7 @@ PARALLEL_WORKERS=2
 
 echo "=========================================================="
 echo "          EXECUTANDO TESTES UNITÁRIOS DO OXEBOTS         "
+echo "  (Nota: linters de estilo estão fora do relatório abaixo)"
 echo "=========================================================="
 
 LOGIC_TEST_PACKAGES="oxebots_observers oxebots_prediction oxebots_strategy oxebots_comms oxebots_trajectory_analysis"

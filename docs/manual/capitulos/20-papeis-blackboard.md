@@ -25,7 +25,7 @@ O campo `epoch` permite que as árvores detectem **papéis velhos**: se a época
 
 ### Histerese e exclusividade
 
-As histereses atuais (custo 2,5; tempo 2 s) são **mantidas**, com uma exceção: são **desligadas** durante os reinícios (o cobrador é travado, como visto). A exclusividade — cada identificador tem exatamente um papel por época — é garantida pelo próprio atribuidor, que publica um conjunto coerente por mensagem.
+As histereses (padrão do código: custo 2,5 e tempo 2,0 s; calibradas em `match_config.yaml` para custo 1,5 e tempo 1,0 s após P04) são **mantidas** em jogo corrido, com duas exceções: são **desligadas** durante os reinícios (o cobrador é travado, como visto) e quando um robô de linha toca/recepciona a bola (`ball_touch_distance_mm` / `receive_distance_mm`). A exclusividade — cada identificador tem exatamente um papel por época — é garantida pelo próprio atribuidor, que publica um conjunto coerente por mensagem.
 
 ## A blackboard proposta
 
@@ -56,7 +56,7 @@ As chaves **temporárias** de subárvore (`pkx`, `pky`, `int_*`, `slot_x`…) co
 
 - Nomes em `snake_case`, com sufixo de unidade quando houver ambiguidade (`_ms`, `_mm`).
 - Posições em **mm** e ângulos em **rad** na árvore; metros só no `RobotGoal`.
-- Preferir **objetos compostos** (`ball` como `Pose2D`, `robot_pose`) a pares de chaves soltas (`ball_x`, `ball_y`), para evitar leituras parciais.
+- Preferir **objetos compostos** (`ball` como `Pose2D`, `robot_pose`) nas folhas de C++ novas, mantendo também os pares escalares (`ball_x`, `ball_y`, `robot_x`, `robot_y`) atualizados atomicamente no mesmo `refresh()` para uso direto nas portas XML das árvores.
 
 ## A idade dos dados
 

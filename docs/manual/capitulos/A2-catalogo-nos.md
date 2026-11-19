@@ -21,9 +21,12 @@ As 29 folhas registradas em `strategy_node.cpp`. "Usos" é o número de ocorrên
 |---|---|---|---|---|---|
 | `UpdateBallPosition` | SA | `robot_id`, `goal_x`, `goal_y` | `ball_x`, `ball_y`, `pre_kick_x/y`, `is_ready_to_kick`, `ball_in_enemy_half` | SUCCESS; RUNNING sem dados | 44 |
 | `CalculateInterception` | SA | `robot_id`, `goal_x` (0), `goal_y` (0), `carry_distance_mm` (−120), `carry_face_lookahead_mm` (400) | `intercept_x/y`, `intercept_pk_x/y`, `intercept_pk_safe_x/y`, `intercept_capture_x/y`, `intercept_carry_x/y`, `intercept_carry_face_x/y`, `is_ready_to_kick` | SUCCESS; RUNNING sem predição | 4 |
-| `IsBallClose` | Cond | `robot_id`, `distance_threshold` (180), `angle_threshold_deg` (−1) | — | SUCCESS/FAILURE | 24 |
+| `IsBallClose` | Cond | `robot_id`, `distance_threshold` (180), `angle_threshold_deg` (−1), `target_x`, `target_y` (opcionais) | — | SUCCESS/FAILURE | 24 |
+| `IsBallClosest` | Cond | `robot_id`, `tolerance` (150) | — | SUCCESS se o robô é o aliado mais próximo da bola | 0 |
 | `IsBallInOurHalf` | Cond | `ball_x` | — | SUCCESS/FAILURE (histerese 100 mm) | 3 |
 | `IsBallInArea` | Cond | `ball_x`, `ball_y` | — | SUCCESS/FAILURE | 0 |
+| `IsCornerKick` | Cond | `x_margin` (750), `y_margin` (650) | — | SUCCESS se a bola está na região de escanteio ofensivo | 1 |
+| `IsThrowIn` | Cond | `y_margin` (450) | — | SUCCESS se a bola está junto à linha lateral | 1 |
 
 ### Defesa
 
