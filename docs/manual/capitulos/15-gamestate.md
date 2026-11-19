@@ -123,7 +123,7 @@ A tabela mostra o que o nó publica a cada comando recebido, num pênalti a favo
 | `STOP` | `STOP` | — | — | 0,75 |
 | `PREPARE_PENALTY_YELLOW` | `PREPARE_PENALTY` | `PENALTY` | **sim** | 0,75 |
 | `NORMAL_START` | `PENALTY` | `PENALTY` | **sim** | 1,5 |
-| (bola move ≥ 0,05 m, ou 10 s) | `STOP` (o GC pára o jogo) ou `RUN` | — | — | — |
+| (bola move ≥ 0,05 m, ou 10 s) | `STOP` / `GOAL` (o GC encerra a cobrança; em jogo corrido de pênalti da EL, o rebote também pode ser seguido de `STOP`) | — | — | — |
 
 Compare com o sistema atual: ali, o `NORMAL_START` apagava a informação de que era um pênalti nosso.
 

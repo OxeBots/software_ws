@@ -122,7 +122,7 @@ Argumentos principais do `ssl-new.launch.py`:
 - `team_color`: `blue` ou `yellow` (atalho para carregar `match_config_blue.yaml` ou `match_config_yellow.yaml`).
 - `config_file`: caminho para um arquivo `.yaml` específico (padrão: `match_config.yaml`).
 - `invert_sides`: `True` ou `False` (espelha coordenadas; por padrão `True` apenas em `mode:=ra`).
-- `bt_xml`: nome do arquivo XML da Behavior Tree (padrão do YAML: `master_strategy_carry.xml`).
+- `bt_xml`: nome do arquivo XML da Behavior Tree (padrão do YAML: `master_strategy_el.xml`).
 - `require_gc`: `True` ou `False` (sobrescreve a exigência de Game Controller ativo na estratégia e no `referee_state_node`).
 - `use_rviz`: `True` (padrão) ou `False`.
 - `match`: `True` ou `False` (sobe Azul em `ROS_DOMAIN_ID=0` e Amarelo em `ROS_DOMAIN_ID=1`).
