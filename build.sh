@@ -2,12 +2,27 @@
 
 # Set the default build type (Debug, Release, RelWithDebInfo and MinSizeRel)
 BUILD_TYPE=RelWithDebInfo
+EXTRA_COLCON_ARGS=""
+
+# Verifica se a flag --slow foi passada na linha de comandos
+for arg in "$@"; do
+    if [ "$arg" == "--slow" ]; then
+        echo "Modo lento ativado: A limitar recursos de CPU e RAM para evitar sobrecarga do cp"
+
+        # Limita o colcon pra processar 8 pacote do ROS de cada vez
+        EXTRA_COLCON_ARGS="--parallel-workers 8"
+
+        # Limita o motor de compilação (Make/Ninja) pra usar 10 threads
+        export CMAKE_BUILD_PARALLEL_LEVEL=10
+        export MAKEFLAGS="-j 10"
+    fi
+done
 
 # Limita a compilação para 2 pacotes simultâneos e no máximo 2 jobs por pacote
 # (MAKEFLAGS evita que o colcon injete -j16 automaticamente no cmake --build)
-export CMAKE_BUILD_PARALLEL_LEVEL=2
-export MAKEFLAGS="-j2"
-PARALLEL_WORKERS=4
+export CMAKE_BUILD_PARALLEL_LEVEL=10
+export MAKEFLAGS="-j4"
+PARALLEL_WORKERS=10
 
 colcon build \
     --symlink-install \
