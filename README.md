@@ -127,6 +127,16 @@ Argumentos principais do `ssl-new.launch.py`:
 - `use_rviz`: `True` (padrão) ou `False`.
 - `match`: `True` ou `False` (sobe Azul em `ROS_DOMAIN_ID=0` e Amarelo em `ROS_DOMAIN_ID=1`).
 
+### 5.1.1 Robô com Kicker Quebrado
+
+Edite `src/oxebots_bringup/config/match_config.yaml` e remova o ID do robô sem chute de `operational_kickers`:
+
+```yaml
+operational_kickers: [0, 2]   # robô 1 sem chute (use [-1] para nenhum; nunca [])
+```
+
+Não precisa recompilar (`--symlink-install`), só reiniciar o launch. O robô sem kicker empurra a bola em vez de chutar e não é escolhido como cobrador de bola parada/pênalti enquanto houver outro robô de linha com chute. Se sobrar só o goleiro em campo, ele cobra as bolas paradas e sai da área para disputar a bola em jogo corrido. Detalhes em `src/oxebots_bringup/README.md` (seções 2.7 e 2.8).
+
 ### 5.2 Scripts de Auxílio
 
 - `./run_match.sh`: Inicia uma partida simulada completa (Time Azul vs. Time Amarelo) redirecionando para o Dev Container se necessário.
