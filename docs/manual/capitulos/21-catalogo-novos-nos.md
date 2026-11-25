@@ -26,6 +26,12 @@ Este capítulo é a **especificação** dos componentes novos e das alterações
 
 **`WaitBallInPlay`** — verdadeira quando a bola se moveu `moved_mm` (50) desde o início do reinício **ou** passaram `timeout_s` (10).
 
+**`IsBallClosest`** — verdadeira se o robô (`robot_id`) é o aliado ativo mais próximo da bola (dentro de `tolerance`, padrão 150 mm).
+
+**`IsCornerKick`** — verdadeira quando a bola está na região de escanteio ofensivo (`x_margin` = 750 mm da linha de fundo adversária e `y_margin` = 650 mm da linha lateral).
+
+**`IsThrowIn`** — verdadeira quando a bola está próxima à linha lateral (`y_margin` = 450 mm) fora da zona de escanteio.
+
 ### Ações síncronas
 
 **`ComputeLegalSlot`** — calcula a posição legal de um slot (Capítulo 18).

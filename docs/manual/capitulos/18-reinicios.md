@@ -42,9 +42,9 @@ Os três reinícios em que o nosso time bate — kick-off, pênalti e free kick 
 
 ![RestartKickerTree: ir ao pré-chute, olhar o alvo e chutar uma vez](figuras/arvore_restart_kicker.png)
 
-1. **`UpdateBallPosition`** calcula o ponto de pré-chute (400 mm atrás da bola, na reta bola→alvo), para o alvo configurado nas portas `target_x`/`target_y`.
-2. **`GoToPoint`** leva o robô até lá, olhando para o alvo, com `ball_contact_threshold_mm=150` (se a bola for tocada no caminho, falha e recomeça).
-3. **`KickOnce`** (nova) executa o chute: pede `MODE_KICK` com a velocidade limitada a 3 m/s, devolve SUCCESS quando a bola **se movimentou pelo menos 50 mm** e FAILURE se passar o prazo de 10 s do regulamento.
+1. **`UpdateBallPosition`** calcula o ponto de pré-chute (400 mm atrás da bola na reta bola→alvo, reduzindo gradualmente até o piso de 230 mm quando a bola está próxima da mureta/linha lateral para evitar que o pré-chute caia fora do campo), para o alvo configurado nas portas `target_x`/`target_y`.
+2. **`GoToPoint`** leva o robô até lá, olhando para a bola (`face_x="{ball_x}" face_y="{ball_y}"`), com `ball_contact_threshold_mm=150` (se a bola for tocada no caminho, falha e recomeça).
+3. **`IsBallClose` + `KickOnce`** executam a aproximação final e o chute: `IsBallClose` valida distância (≤ 140 mm) e alinhamento tanto com a bola quanto com o alvo (`target_x`/`target_y`, ≤ 15°), e `KickOnce` pede `MODE_KICK` com a velocidade limitada a 3 m/s, devolvendo SUCCESS quando a bola **se movimentou pelo menos 50 mm** e FAILURE se passar o prazo de 10 s do regulamento.
 
 A diferença em relação a `KickBall` é que `KickOnce` confirma o **resultado** (a bola se moveu), não só a execução do chute, e carrega o prazo do regulamento.
 
