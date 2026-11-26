@@ -1,0 +1,28 @@
+/**:
+  ros__parameters:
+    # --- Parâmetros de Ablação e Benchmark ---
+    # PathFollowerNode (movement_calculation_node):
+    # Quando false, desativa applySafetyGate (teto de 0.75 m/s em STOP e clamp radial de 500 mm da bola)
+    # e clampVelocities (proteção das áreas de defesa).
+    enable_safety_gate: true
+
+    # StrategyNode (strategy_node_N):
+    # Quando false, substitui os nós reativos apenas na árvore mestre (master_strategy_el.xml) por
+    # Fallback/Sequence comuns (mantendo as subárvores táticas intactas), isolando o efeito da
+    # preempção supervisória na troca de estado do Game Controller.
+    use_reactive_preemption: true
+    # Quando true, publica a duração de cada tickOnce() (em microssegundos) em /strategy/tick_duration_us.
+    publish_tick_metrics: false
+
+    # RoleAssignerNode (role_assigner_node):
+    # Modo de alocação de papéis: "dynamic" (padrão com função de custo e histerese) ou "static"
+    # (mantém IDs fixos 0=GK, 1=Attacker, 2=Defender mesmo se um robô desaparecer da visão).
+    role_allocation_mode: "dynamic"
+    hysteresis: 2.5
+    time_hysteresis: 2.0
+
+role_assigner_node:
+  ros__parameters:
+    role_allocation_mode: "dynamic"
+    hysteresis: 2.5
+    time_hysteresis: 2.0
