@@ -96,9 +96,10 @@ class BenchmarkLoggerNode(Node):
         self.penalty_width_mm = 1350.0
 
         # Histórico para derivada de velocidade medida (v_meas em m/s) e últimos comandos (v_cmd)
-        self.prev_robot_state = {}  # robot_id -> (x_mm, y_mm, t_monotonic)
-        self.robot_v_meas = {}      # robot_id -> float (m/s)
-        self.last_cmd_by_id = {}    # robot_id -> (v_cmd_mps, ang_vel, kick_speed, t_monotonic)
+        self.robot_pos_history = {}  # robot_id -> list of (x_mm, y_mm, t_sec)
+        self.robot_v_window = {}     # robot_id -> list of recent raw speeds (for median filter)
+        self.robot_v_meas = {}       # robot_id -> float (m/s)
+        self.last_cmd_by_id = {}     # robot_id -> (v_cmd_mps, ang_vel, kick_speed, t_monotonic)
 
         latched_qos = QoSProfile(
             history=HistoryPolicy.KEEP_LAST,
@@ -118,7 +119,7 @@ class BenchmarkLoggerNode(Node):
 
         # Timer de verificação de duração (20 Hz)
         self.finished = False
-        self.create_timer(0.05, self._check_duration)
+        self._timer = self.create_timer(0.05, self._check_duration)
 
     def _on_game_state(self, msg: GameState):
         self.last_game_state = msg
@@ -187,19 +188,62 @@ class BenchmarkLoggerNode(Node):
             x_mm = float(ally.x)
             y_mm = float(ally.y)
 
+            # Usa o timestamp de detecção do próprio robô (ally.stamp) se preenchido,
+            # com fallback para msg.header.stamp ou relógio monotônico
+            t_frame = now_m
+            if hasattr(ally, 'stamp') and (ally.stamp.sec > 0 or ally.stamp.nanosec > 0):
+                t_frame = float(ally.stamp.sec) + float(ally.stamp.nanosec) * 1e-9
+            elif hasattr(msg, 'header') and (msg.header.stamp.sec > 0 or msg.header.stamp.nanosec > 0):
+                t_frame = float(msg.header.stamp.sec) + float(msg.header.stamp.nanosec) * 1e-9
+
             v_meas = self.robot_v_meas.get(rid, 0.0)
-            if rid in self.prev_robot_state:
-                px, py, pt = self.prev_robot_state[rid]
-                dt = now_m - pt
-                if dt >= 0.008 and (x_mm != px or y_mm != py):
-                    raw_v = math.hypot(x_mm - px, y_mm - py) / dt / 1000.0
-                    v_meas = 0.0 if raw_v > 10.0 else (0.5 * raw_v + 0.5 * v_meas)
-                    self.prev_robot_state[rid] = (x_mm, y_mm, now_m)
-                elif dt > 0.15:
+            hist = self.robot_pos_history.setdefault(rid, [])
+            v_win = self.robot_v_window.setdefault(rid, [])
+
+            if hist:
+                last_x, last_y, last_t = hist[-1]
+                dt_last = t_frame - last_t
+                if dt_last < -1.0 or dt_last > 1.0:
+                    # Salto de relógio / reinício
+                    hist.clear()
+                    v_win.clear()
+                    hist.append((x_mm, y_mm, t_frame))
                     v_meas = 0.0
-                    self.prev_robot_state[rid] = (x_mm, y_mm, now_m)
+                elif (x_mm != last_x or y_mm != last_y) and dt_last >= 0.004:
+                    hist.append((x_mm, y_mm, t_frame))
+                    if len(hist) > 5:
+                        hist.pop(0)
+                    # Calcula velocidade em janela de >= 45 ms (~3 frames) para eliminar jitter
+                    # quando dois pacotes UDP do SSL-Vision chegam agrupados
+                    anchor_x, anchor_y, anchor_t = hist[0]
+                    for hx, hy, ht in reversed(hist[:-1]):
+                        if (t_frame - ht) >= 0.045:
+                            anchor_x, anchor_y, anchor_t = hx, hy, ht
+                            break
+                    dt_span = t_frame - anchor_t
+                    if dt_span >= 0.025:
+                        raw_v = math.hypot(x_mm - anchor_x, y_mm - anchor_y) / dt_span / 1000.0
+                        if raw_v > 6.0:
+                            # Teleporte no simulador: reseta janela de velocidade
+                            hist.clear()
+                            v_win.clear()
+                            hist.append((x_mm, y_mm, t_frame))
+                            v_meas = 0.0
+                        else:
+                            v_win.append(raw_v)
+                            if len(v_win) > 3:
+                                v_win.pop(0)
+                            sorted_w = sorted(v_win)
+                            median_v = sorted_w[len(sorted_w) // 2]
+                            v_meas = 0.6 * median_v + 0.4 * v_meas
+                elif dt_last > 0.12:
+                    v_meas = 0.0
+                    v_win.clear()
+                    hist.clear()
+                    hist.append((x_mm, y_mm, t_frame))
             else:
-                self.prev_robot_state[rid] = (x_mm, y_mm, now_m)
+                hist.append((x_mm, y_mm, t_frame))
+
             self.robot_v_meas[rid] = v_meas
 
             v_cmd = 0.0
@@ -314,7 +358,8 @@ class BenchmarkLoggerNode(Node):
         role = self._resolve_role(robot_id)
 
         # Limiar da regra SSL-EL: viol_speed_stop = 1 se em STOP e velocidade > 0.75 m/s
-        viol_speed_stop = 1 if (gc_state == 'STOP' and (v_cmd > 0.75 or v_meas > 0.75)) else 0
+        # (tolerância de 1e-3 m/s para evitar falso positivo por arredondamento float32 de 0.75f)
+        viol_speed_stop = 1 if (gc_state == 'STOP' and (v_cmd > 0.751 or v_meas > 0.751)) else 0
         viol_defense_area = (
             self._check_defense_area_violation(robot_id, role, x_mm, y_mm) if is_active else 0
         )
@@ -345,8 +390,14 @@ class BenchmarkLoggerNode(Node):
     def _check_duration(self):
         if not self.finished and (time.monotonic() - self.start_monotonic) >= self.duration_s:
             self.finished = True
-            self.close()
-            raise SystemExit(0)
+
+    def stop_timers(self):
+        if self._timer is not None:
+            try:
+                self.destroy_timer(self._timer)
+            except Exception:
+                pass
+            self._timer = None
 
     def close(self):
         if self.csv_file and not self.csv_file.closed:
@@ -376,13 +427,21 @@ def main(argv=None):
     rclpy.init(args=argv)
     node = BenchmarkLoggerNode(output_path=args.output, duration_s=args.duration)
     try:
-        rclpy.spin(node)
+        while rclpy.ok() and not node.finished:
+            rclpy.spin_once(node, timeout_sec=0.05)
     except (KeyboardInterrupt, SystemExit):
         pass
     finally:
+        # 1. Cancela timers
+        node.stop_timers()
+        # 2. Salva e fecha o CSV
         node.close()
-        if rclpy.ok():
+        # 3. Destrói o nó e desliga o ROS 2
+        try:
             node.destroy_node()
+        except Exception:
+            pass
+        if rclpy.ok():
             rclpy.shutdown()
 
 

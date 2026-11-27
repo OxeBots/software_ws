@@ -1,0 +1,15 @@
+/**:
+  ros__parameters:
+    # --- Experimento E1: Configuração C (Full / Com Safety Gate e Com Preempção Reativa) ---
+    enable_safety_gate: true
+    use_reactive_preemption: true
+    publish_tick_metrics: true
+    role_allocation_mode: "dynamic"
+    hysteresis: 2.5
+    time_hysteresis: 2.0
+
+role_assigner_node:
+  ros__parameters:
+    role_allocation_mode: "dynamic"
+    hysteresis: 2.5
+    time_hysteresis: 2.0
