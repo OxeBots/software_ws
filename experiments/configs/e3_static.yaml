@@ -1,0 +1,17 @@
+/**:
+  ros__parameters:
+    # --- Experimento E3 (Baseline Estático): role_allocation_mode = "static" ---
+    # Mantém IDs fixos (0 = Goalkeeper, 1 = Attacker, 2 = Defender) sem realocar nem marcar
+    # NO_ROBOT quando um robô desaparece da visão.
+    enable_safety_gate: true
+    use_reactive_preemption: true
+    publish_tick_metrics: true
+    role_allocation_mode: "static"
+    hysteresis: 0.6
+    time_hysteresis: 0.5
+
+role_assigner_node:
+  ros__parameters:
+    role_allocation_mode: "static"
+    hysteresis: 0.6
+    time_hysteresis: 0.5

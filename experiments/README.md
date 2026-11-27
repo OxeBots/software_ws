@@ -37,13 +37,18 @@ experiments/
 │   ├── e2_1_cost_only.yaml                # E2 Config 1: hysteresis=0.6, time_hysteresis=0.0
 │   ├── e2_2_time_only.yaml                # E2 Config 2: hysteresis=0.0, time_hysteresis=0.5
 │   ├── e2_3_dual_calibrated.yaml          # E2 Config 3: hysteresis=0.6, time_hysteresis=0.5
-│   └── e2_4_dual_legacy.yaml              # E2 Config 4: hysteresis=2.5, time_hysteresis=2.0 (Lock-In)
+│   ├── e2_4_dual_legacy.yaml              # E2 Config 4: hysteresis=2.5, time_hysteresis=2.0 (Lock-In)
+│   ├── e3_static.yaml                     # E3 Baseline: role_allocation_mode="static"
+│   └── e3_dynamic.yaml                    # E3 Proposto: role_allocation_mode="dynamic"
 ├── e1/
 │   ├── e1_scenario.py                     # Roteiro determinístico de 38 s (Safety Gate & Preempção)
 │   └── run_e1.sh                          # Runner em lote do E1 (A, B, C)
 ├── e2/
-│   ├── e2_scenario.py                     # Roteiro determinístico de ~65 s (Histerese Dupla & Lock-In)
+│   ├── e2_scenario.py                     # Roteiro determinístico de ~59 s (Histerese Dupla & Lock-In)
 │   └── run_e2.sh                          # Runner em lote do E2 (5 configurações)
+├── e3/
+│   ├── e3_scenario.py                     # Roteiro determinístico de ~63 s (Tolerância a Falhas 3->2->1)
+│   └── run_e3.sh                          # Runner em lote do E3 (static vs. dynamic)
 └── results/                               # (Ignorado pelo git) CSVs brutos e timestamps de eventos
 ```
 
@@ -95,12 +100,36 @@ Com apenas o **`grSim` aberto** (e o Game Controller **fechado**), execute a par
    * A bola oscila a cada `0.4 s` em torno da mediatriz ($\pm 0.14\text{ m} \implies \Delta r \approx 0.28\text{ m}$) com rajadas curtas ($\pm 0.38\text{ m}$ por `0.18 s`), medindo o número de trocas espúrias (`SW_P1`), a taxa por minuto (`SW/MIN`) e a distância percorrida (`DIST_P1`).
 3. **Fase 2A — Troca Legítima Moderada (`t = 32 s` a `47 s`, evento `LEGIT_SWITCH_MODERATE`)**:
    * Atacante atual posicionado a $r_{\text{att}} = 1.25\text{ m}$ da bola e defensor a $r_{\text{def}} = 0.35\text{ m}$ ($\Delta r = 0.90\text{ m}$: acima do limiar calibrado de `0.30 m`, porém abaixo do limiar legado de `1.25 m`), comprovando o **Lock-In** de `e2_4_dual_legacy`.
-4. **Fase 2B — Troca Legítima Ampla (`t = 47 s` a `62 s`, evento `LEGIT_SWITCH_LARGE`)**:
-   * Atacante atual posicionado a $r_{\text{att}} \approx 2.33\text{ m}$ e defensor a $r_{\text{def}} \approx 0.32\text{ m}$ ($\Delta r \approx 2.01\text{ m}$: acima de ambos os limiares), medindo a latência pura imposta pela histerese temporal (`0.0 s` vs. `0.5 s` vs. `2.0 s`).
+4. **Fase 2B — Troca Legítima Ampla + Rebote em 0.8 s (`t = 42 s` a `56 s`, eventos `LEGIT_SWITCH_LARGE` e `LEGIT_REVERSAL_08S`)**:
+   * Atacante atual posicionado a $r_{\text{att}} \approx 2.53\text{ m}$ e defensor a $r_{\text{def}} = 0.50\text{ m}$ ($\Delta C \approx 4.1 > 2.5$), seguido de um rebote de bola aos `0.8 s` a `0.45 m` do novo defensor para medir a retenção imposta pelo período refratário (`time_hysteresis`: `0.5 s` vs. `2.0 s`).
 
 ---
 
-## 5. Colunas dos CSVs Gerados (`experiments/results/{e1,e2}/.../run_XX.csv`)
+## 5. Como Rodar o Experimento E3 (Tolerância a Falhas: Degradação 3 -> 2 -> 1 Robôs — ~63 s)
+
+Com apenas o **`grSim` aberto** (e o Game Controller **fechado**), execute a partir da raiz do workspace:
+
+* **Execução padrão (1 repetição de `static` e `dynamic` — ~2,5 min no total)**:
+  ```bash
+  ./experiments/e3/run_e3.sh 1
+  ```
+* **Bateria com `N` repetições (ex.: 3)**:
+  ```bash
+  ./experiments/e3/run_e3.sh 3
+  ```
+
+### O que o Experimento E3 avalia em cada rodada (~63 s, `--duration 66` no logger)
+1. **Setup Legal do SSL GC (`3 s`)**: `INIT_HALT` (`1 s`) $\rightarrow$ `INIT_STOP` (`2 s`).
+2. **Fase 1 — Operação Nominal com 3 Robôs (`0 s` a `20 s` de `NORMAL_PLAY`)**:
+   * Goleiro (ID 0) em `(-1.95, 0.0)`, robôs de linha (IDs 1 e 2) em `(-0.80, ±0.45)`, bola em `(+0.30, +0.20)`.
+3. **Fase 2 — Perda do Atacante: Degradação 3 $\rightarrow$ 2 Robôs (`20 s` a `40 s`, evento `FAIL_3_TO_2`)**:
+   * Remove o `attacker` atual (`turnon=False` + slot fora do campo) e posiciona a bola em `(+0.40, 0.00)` sem mover os 2 sobreviventes. Avalia a latência de promoção do defensor sobrevivente a `attacker` (`REALLOC_3_2_MS`), a cobertura de ataque (`ATT_COV_P2(%)`) e o tempo até alcançar a bola (`T_BALL_P2_MS`).
+4. **Fase 3 — Segunda Falha: Degradação 2 $\rightarrow$ 1 Robô (`40 s` a `60 s`, evento `FAIL_2_TO_1`)**:
+   * Remove o goleiro (ID 0), restando apenas 1 robô de linha sobrevivente com a bola em `(-0.60, 0.00)`, validando a estabilidade com time unitário (`REALLOC_2_1_OK`, `FINAL_ROLE`) e a ausência de comandos fantasma para os robôs removidos (`GHOST_CMD = 0`).
+
+---
+
+## 6. Colunas dos CSVs Gerados (`experiments/results/{e1,e2,e3}/.../run_XX.csv`)
 
 | Coluna | Descrição |
 | :--- | :--- |

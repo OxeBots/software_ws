@@ -1,0 +1,17 @@
+/**:
+  ros__parameters:
+    # --- Experimento E3 (Arquitetura Proposta): role_allocation_mode = "dynamic" ---
+    # Realoca dinamicamente os papéis entre os robôs visíveis com histerese calibrada (0.6 / 0.5 s)
+    # e atribui NO_ROBOT (999) aos papéis vagos quando o time degrada de 3 -> 2 -> 1 robôs.
+    enable_safety_gate: true
+    use_reactive_preemption: true
+    publish_tick_metrics: true
+    role_allocation_mode: "dynamic"
+    hysteresis: 0.6
+    time_hysteresis: 0.5
+
+role_assigner_node:
+  ros__parameters:
+    role_allocation_mode: "dynamic"
+    hysteresis: 0.6
+    time_hysteresis: 0.5
