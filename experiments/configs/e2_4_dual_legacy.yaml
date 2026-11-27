@@ -1,0 +1,15 @@
+/**:
+  ros__parameters:
+    # --- Experimento E2: Configuração 4 (Dual Legacy / Super-Amortecido com Lock-In) ---
+    enable_safety_gate: true
+    use_reactive_preemption: true
+    publish_tick_metrics: true
+    role_allocation_mode: "dynamic"
+    hysteresis: 2.5
+    time_hysteresis: 2.0
+
+role_assigner_node:
+  ros__parameters:
+    role_allocation_mode: "dynamic"
+    hysteresis: 2.5
+    time_hysteresis: 2.0
