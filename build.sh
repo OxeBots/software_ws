@@ -20,9 +20,9 @@ done
 
 # Limita a compilação para 2 pacotes simultâneos e no máximo 2 jobs por pacote
 # (MAKEFLAGS evita que o colcon injete -j16 automaticamente no cmake --build)
-export CMAKE_BUILD_PARALLEL_LEVEL=7
-export MAKEFLAGS="-j7"
-PARALLEL_WORKERS=7
+export CMAKE_BUILD_PARALLEL_LEVEL=4
+export MAKEFLAGS="-j4"
+PARALLEL_WORKERS=4
 
 colcon build \
     --symlink-install \
